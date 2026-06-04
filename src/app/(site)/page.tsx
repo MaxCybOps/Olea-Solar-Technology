@@ -4,6 +4,9 @@ import Image from "next/image";
 import HeroParticles from "@/components/site/HeroParticles";
 import CountUp from "@/components/site/CountUp";
 import ScrollFade from "@/components/site/ScrollFade";
+import ImpactSection from "@/components/site/ImpactSection";
+import GallerySection from "@/components/site/GallerySection";
+import FeaturedProducts from "@/components/site/FeaturedProducts";
 import { STATS, SERVICES, DIFFERENTIATORS, TESTIMONIALS } from "@/lib/constants";
 import { Zap, Sun, MapPin, Award, Globe, Building2, Bot, ShieldCheck, Users } from "lucide-react";
 
@@ -179,10 +182,14 @@ export default function HomePage() {
               <ScrollFade key={s.id} delay={i * 70}>
                 <Link href={`/services#${s.id}`} className="card card-hoverable" style={{ overflow: "hidden", display: "flex", flexDirection: "column", textDecoration: "none" }}>
                   <div style={{ position: "relative", aspectRatio: "16/9", overflow: "hidden", background: "var(--olea-green-900)" }}>
-                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, var(--olea-green-700), var(--olea-green-900))", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ fontSize: 48, opacity: 0.3 }}>⚡</span>
-                    </div>
-                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(7,41,31,0.05) 50%, rgba(7,41,31,0.45) 100%)" }} />
+                    <Image
+                      src={SERVICE_IMAGES[s.id] ?? "/images/services/cei.jpg"}
+                      alt={s.name}
+                      fill
+                      style={{ objectFit: "cover", transition: "transform 500ms var(--ease-out)" }}
+                      className="service-card-img"
+                    />
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(7,41,31,0.05) 50%, rgba(7,41,31,0.55) 100%)" }} />
                   </div>
                   <div style={{ padding: "26px 28px 30px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 12 }}>
@@ -234,6 +241,15 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── IMPACT + NIGERIA MAP ── */}
+      <ImpactSection />
+
+      {/* ── GALLERY ── */}
+      <GallerySection />
+
+      {/* ── FEATURED PRODUCTS ── */}
+      <FeaturedProducts />
 
       {/* ── TESTIMONIALS ── */}
       <section className="section section-bg">
@@ -328,6 +344,7 @@ export default function HomePage() {
       </section>
 
       <style>{`
+        .card-hoverable:hover .service-card-img { transform: scale(1.06); }
         @media (max-width: 1024px) {
           .wwd-grid    { grid-template-columns: 1fr !important; }
           .diff-grid   { grid-template-columns: repeat(2, 1fr) !important; }
