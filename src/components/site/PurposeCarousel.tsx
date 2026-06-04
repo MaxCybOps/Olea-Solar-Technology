@@ -26,6 +26,8 @@ export default function PurposeCarousel() {
       boxShadow: "var(--shadow-xl)",
       position: "relative",
       background: "var(--olea-green-900)",
+      maxWidth: 440,
+      width: "100%",
     }}>
       {SLIDES.map((src, i) => (
         // eslint-disable-next-line @next/next/no-img-element
