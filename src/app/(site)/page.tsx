@@ -9,7 +9,16 @@ import GallerySection from "@/components/site/GallerySection";
 import FeaturedProducts from "@/components/site/FeaturedProducts";
 import PurposeCarousel from "@/components/site/PurposeCarousel";
 import { STATS, SERVICES, DIFFERENTIATORS, TESTIMONIALS } from "@/lib/constants";
-import { Zap, Sun, MapPin, Award, Globe, Building2, Bot, ShieldCheck, Users } from "lucide-react";
+import { Zap, Sun, MapPin, Award, Globe, Building2, Bot, ShieldCheck, Users, Cpu, HardHat, ClipboardCheck, Wrench, GraduationCap, type LucideIcon } from "lucide-react";
+
+const SERVICE_ICONS: Record<string, LucideIcon> = {
+  cei: Zap,
+  ses: Cpu,
+  ies: HardHat,
+  con: ClipboardCheck,
+  mnt: Wrench,
+  aca: GraduationCap,
+};
 
 export const metadata: Metadata = {
   title: "Olea Technologies — Powering Sustainable Future",
@@ -192,9 +201,10 @@ export default function HomePage() {
                   </div>
                   <div style={{ padding: "26px 28px 30px" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 12 }}>
+                      {(() => { const SvcIcon = SERVICE_ICONS[s.id] ?? Zap; return (
                       <div style={{ width: 48, height: 48, borderRadius: 12, background: i % 3 === 1 ? "var(--olea-gold-50)" : "var(--olea-green-50)", color: i % 3 === 1 ? "var(--olea-gold-700)" : "var(--olea-green-600)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                        <Zap size={22} />
-                      </div>
+                        <SvcIcon size={22} />
+                      </div>); })()}
                       <h4 style={{ fontWeight: 600, fontSize: 20, lineHeight: 1.25, margin: 0, color: "var(--olea-ink)" }}>{s.name}</h4>
                     </div>
                     <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--fg-2)", margin: "0 0 20px" }}>{s.blurb}</p>
