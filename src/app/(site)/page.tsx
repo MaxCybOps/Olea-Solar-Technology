@@ -7,6 +7,7 @@ import ScrollFade from "@/components/site/ScrollFade";
 import ImpactSection from "@/components/site/ImpactSection";
 import GallerySection from "@/components/site/GallerySection";
 import FeaturedProducts from "@/components/site/FeaturedProducts";
+import PurposeCarousel from "@/components/site/PurposeCarousel";
 import { STATS, SERVICES, DIFFERENTIATORS, TESTIMONIALS } from "@/lib/constants";
 import { Zap, Sun, MapPin, Award, Globe, Building2, Bot, ShieldCheck, Users } from "lucide-react";
 
@@ -23,7 +24,7 @@ const SERVICE_IMAGES: Record<string, string> = {
   cei: "/images/services/cei.jpg",
   ses: "/images/services/ses.jpg",
   ies: "/images/services/ies.jpg",
-  con: "/images/services/con.jpg",
+  con: "/images/services/consulting.jpg",
   mnt: "/images/services/mnt.jpg",
   aca: "/images/services/aca.jpg",
 };
@@ -136,9 +137,7 @@ export default function HomePage() {
         <div className="container">
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }} className="wwd-grid">
             <ScrollFade>
-              <div style={{ aspectRatio: "4/5", borderRadius: 16, overflow: "hidden", boxShadow: "var(--shadow-xl)", background: "var(--olea-green-900)", position: "relative" }}>
-                <Image src="/images/about/team-work.jpg" alt="Olea team at work" fill style={{ objectFit: "cover" }} />
-              </div>
+              <PurposeCarousel />
             </ScrollFade>
             <ScrollFade delay={120}>
               <span className="eyebrow">Our Purpose</span>
@@ -324,7 +323,7 @@ export default function HomePage() {
               <ScrollFade key={b.id} delay={i * 80}>
                 <Link href={`/blog/${b.id}`} className="card card-hoverable" style={{ overflow: "hidden", display: "flex", flexDirection: "column", textDecoration: "none" }}>
                   <div style={{ aspectRatio: "16/10", position: "relative", overflow: "hidden", background: "var(--olea-green-900)" }}>
-                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, var(--olea-green-700), var(--olea-green-900))" }} />
+                    <Image src={b.image} alt={b.title} fill style={{ objectFit: "cover", transition: "transform 500ms var(--ease-out)" }} className="blog-card-img" />
                     <span style={{ position: "absolute", top: 16, left: 16, zIndex: 2, background: "var(--accent)", color: "var(--olea-ink)", padding: "4px 10px", borderRadius: 4, fontSize: 10.5, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>
                       {b.cat}
                     </span>
@@ -345,9 +344,17 @@ export default function HomePage() {
 
       <style>{`
         .card-hoverable:hover .service-card-img { transform: scale(1.06); }
+        .card-hoverable:hover .blog-card-img    { transform: scale(1.06); }
+
         @media (max-width: 1024px) {
           .wwd-grid    { grid-template-columns: 1fr !important; }
           .diff-grid   { grid-template-columns: repeat(2, 1fr) !important; }
+          [style*="repeat(4, 1fr)"] { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (max-width: 820px) {
+          [style*="repeat(3, 1fr)"] { grid-template-columns: repeat(2, 1fr) !important; }
+          [style*="1fr 1fr"] { grid-template-columns: 1fr !important; }
+          [style*="gap: 80px"] { gap: 40px !important; }
         }
         @media (max-width: 768px) {
           .services-grid { grid-template-columns: 1fr !important; }
@@ -355,8 +362,11 @@ export default function HomePage() {
           .blog-grid     { grid-template-columns: 1fr !important; }
           .diff-grid     { grid-template-columns: 1fr !important; }
         }
-        @media (max-width: 640px) {
+        @media (max-width: 600px) {
+          [style*="repeat(3, 1fr)"] { grid-template-columns: 1fr !important; }
+          [style*="repeat(4, 1fr)"] { grid-template-columns: 1fr !important; }
           [style*="repeat(5, 1fr)"] { grid-template-columns: repeat(2, 1fr) !important; }
+          .hero-cta-row { flex-direction: column; align-items: stretch; }
         }
       `}</style>
     </>
