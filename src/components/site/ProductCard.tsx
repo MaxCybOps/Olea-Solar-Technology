@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingCart, Zap, Sun, BatteryCharging, Home, SlidersVertical, Factory, Wrench, type LucideIcon } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import { formatPrice } from "@/lib/utils";
@@ -13,6 +14,15 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   systems: Home,
   charge_controllers: SlidersVertical,
   accessories: Wrench,
+};
+
+const CATEGORY_IMAGES: Record<string, string> = {
+  inverters: "/images/services/ses.jpg",
+  solar_panels: "/images/services/cei.jpg",
+  batteries: "/images/services/ies.jpg",
+  systems: "/images/services/consulting.jpg",
+  charge_controllers: "/images/services/mnt.jpg",
+  accessories: "/images/services/aca.jpg",
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -58,10 +68,16 @@ export default function ProductCard({ product: p, compact = false }: Props) {
       className="card card-hoverable"
       style={{ overflow: "hidden", display: "flex", flexDirection: "column", textDecoration: "none", opacity: p.stockQuantity === 0 ? 0.8 : 1 }}
     >
-      {/* Image / icon area */}
-      <div style={{ position: "relative", aspectRatio: compact ? "4/3" : "16/10", overflow: "hidden", background: "linear-gradient(135deg, var(--olea-green-700), var(--olea-green-900))", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 60% 40%, rgba(249,166,6,0.18) 0%, transparent 60%)" }} />
-        <span style={{ position: "relative" }}><Icon size={compact ? 48 : 64} style={{ color: "rgba(249,166,6,0.7)" }} /></span>
+      {/* Image area */}
+      <div style={{ position: "relative", aspectRatio: compact ? "4/3" : "16/10", overflow: "hidden" }}>
+        <Image
+          src={CATEGORY_IMAGES[p.category] ?? "/images/services/cei.jpg"}
+          alt={p.name}
+          fill
+          style={{ objectFit: "cover", transition: "transform 500ms" }}
+          className="product-card-img"
+        />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(160deg, rgba(7,41,31,0.50) 0%, rgba(7,41,31,0.22) 100%)" }} />
         {p.isFeatured && (
           <span style={{ position: "absolute", top: 12, left: 12, background: "var(--accent)", color: "var(--olea-ink)", fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "3px 10px", borderRadius: 4 }}>
             Featured
@@ -70,6 +86,9 @@ export default function ProductCard({ product: p, compact = false }: Props) {
         <span style={{ position: "absolute", top: 12, right: 12, background: stockBadge.bg, color: stockBadge.color, fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: "3px 10px", borderRadius: 4 }}>
           {stockBadge.label}
         </span>
+        <div style={{ position: "absolute", bottom: 10, left: 12, width: 32, height: 32, borderRadius: 8, background: "rgba(7,41,31,0.65)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Icon size={18} style={{ color: "var(--accent)" }} />
+        </div>
       </div>
 
       {/* Body */}

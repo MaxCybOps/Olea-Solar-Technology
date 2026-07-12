@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { Search, SlidersHorizontal, X } from "lucide-react";
 import ProductCard from "@/components/site/ProductCard";
 import { SEED_PRODUCTS } from "@/lib/products-data";
@@ -23,7 +25,7 @@ const SORT_OPTIONS = [
   { value: "rating", label: "Top Rated" },
 ];
 
-const MAX_PRICE = 1500000;
+const MAX_PRICE = 2000000;
 
 export default function ProductsPage() {
   const [selectedCats, setSelectedCats] = useState<Set<ProductCategory>>(new Set());
@@ -101,14 +103,14 @@ export default function ProductsPage() {
           type="range"
           min={35000}
           max={MAX_PRICE}
-          step={25000}
+          step={50000}
           value={priceMax}
           onChange={(e) => setPriceMax(Number(e.target.value))}
           style={{ width: "100%", accentColor: "var(--brand)" }}
         />
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "var(--fg-2)", marginTop: 6 }}>
           <span>₦35k</span>
-          <span>₦1.5M</span>
+          <span>₦2M</span>
         </div>
       </div>
 
@@ -143,14 +145,29 @@ export default function ProductsPage() {
   return (
     <>
       {/* Hero */}
-      <section style={{ background: "var(--bg-dark)", color: "#fff", paddingTop: 148, paddingBottom: 64, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", right: "-5%", top: "0%", width: 500, height: 500, background: "radial-gradient(circle, rgba(249,166,6,0.12) 0%, transparent 60%)", pointerEvents: "none" }} />
-        <div className="container" style={{ position: "relative" }}>
+      <section style={{ position: "relative", background: "var(--olea-green-900)", color: "#fff", paddingTop: 148, paddingBottom: 80, overflow: "hidden", minHeight: 440 }}>
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <Image
+            src="/images/products-hero.jpg"
+            alt=""
+            fill
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            priority
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(7,41,31,0.90) 0%, rgba(7,41,31,0.65) 100%)" }} />
+        </div>
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+          <nav style={{ fontSize: 13, color: "rgba(255,255,255,0.48)", marginBottom: 28 }}>
+            <Link href="/" style={{ color: "rgba(255,255,255,0.48)" }}>Home</Link>
+            <span style={{ margin: "0 8px" }}>›</span>
+            <span>Shop</span>
+          </nav>
           <span className="eyebrow">Shop</span>
           <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(40px, 5vw, 64px)", lineHeight: 1.05, letterSpacing: "-0.02em", margin: "0 0 14px", color: "#fff" }}>
-            Equipment built for African conditions.
+            Equipment built for<br />
+            <span style={{ color: "var(--accent)" }}>African conditions.</span>
           </h1>
-          <p style={{ fontSize: 17, color: "rgba(255,255,255,0.7)", maxWidth: 560, margin: 0, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 17, color: "rgba(255,255,255,0.70)", maxWidth: 560, margin: 0, lineHeight: 1.6 }}>
             Inverters, panels, batteries, and complete systems. Vetted brands. Real warranties. Installed by Olea engineers.
           </p>
         </div>
@@ -220,7 +237,7 @@ export default function ProductsPage() {
 
               {/* Grid */}
               {filtered.length > 0 ? (
-                <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
+                <div className="products-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
                   {filtered.map((p) => (
                     <ProductCard key={p.id} product={p} />
                   ))}
@@ -257,15 +274,22 @@ export default function ProductsPage() {
       )}
 
       <style>{`
+        @media (max-width: 1200px) {
+          .products-grid { grid-template-columns: repeat(3, 1fr) !important; }
+        }
         @media (max-width: 900px) {
-          .products-layout   { grid-template-columns: 1fr !important; }
-          .products-sidebar  { display: none !important; }
+          .products-layout     { grid-template-columns: 1fr !important; }
+          .products-sidebar    { display: none !important; }
           .products-filter-btn { display: flex !important; }
-          .products-grid     { grid-template-columns: repeat(2, 1fr) !important; }
+          .products-grid       { grid-template-columns: repeat(2, 1fr) !important; }
         }
         @media (max-width: 540px) {
+          .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media (max-width: 380px) {
           .products-grid { grid-template-columns: 1fr !important; }
         }
+        .card-hoverable:hover .product-card-img { transform: scale(1.06); }
       `}</style>
     </>
   );

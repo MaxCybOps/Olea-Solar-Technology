@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import ScrollFade from "@/components/site/ScrollFade";
 import { TESTIMONIALS, STATS } from "@/lib/constants";
 import CountUp from "@/components/site/CountUp";
@@ -14,6 +15,13 @@ const EXTRA_TESTIMONIALS = [
   { quote: "We were sceptical about solar for our hotel but Olea's team walked us through everything, handled the installation in 3 days, and our electricity bills dropped by 80%. We wish we had done this years ago.", name: "Hotel Manager", role: "Hospitality", location: "Port Harcourt", initials: "HM", rating: 5 },
   { quote: "Olea installed a complete 10KVA system for our school. The students can study at night now without generator noise. Education shouldn't be disrupted by NEPA.", name: "Principal Okafor", role: "Education Sector", location: "Enugu", initials: "PO", rating: 5 },
   { quote: "The monitoring app is brilliant. I can see exactly how much power we're generating and consuming from my phone. Three years and not a single major issue.", name: "Dr. Nnamdi A.", role: "Medical Clinic Owner", location: "Lagos", initials: "NA", rating: 5 },
+  { quote: "We installed a 3.5KVA system for our beauty salon in March. Our clients now enjoy uninterrupted service — no more generator fumes during treatments. Business is up 30% because we can finally serve clients in the evenings.", name: "Chinyere O.", role: "Spa & Beauty Owner", location: "Enugu", initials: "CO", rating: 5 },
+  { quote: "As an engineer I reviewed every spec sheet before signing. Three months in, the system exceeds every performance metric. The battery management reporting is world-class. I'm recommending Olea to every colleague I know.", name: "Engr. Bello M.", role: "Mechanical Engineer", location: "Kano", initials: "BM", rating: 5 },
+  { quote: "I'm 62 years old and I didn't think I could switch to solar. The Olea team was incredibly patient — they explained everything simply and came back twice to make sure I was comfortable. Now I sleep without generator noise.", name: "Mrs. Obioma C.", role: "Retired Civil Servant", location: "Onitsha", initials: "OC", rating: 5 },
+  { quote: "Our congregation had been worshipping in heat for years. The 5KVA system now powers all our fans, projector, and sound system without interruption. The difference for our members has been remarkable.", name: "Pastor Emmanuel T.", role: "Church Administrator", location: "Abuja", initials: "ET", rating: 5 },
+  { quote: "Perishable goods and unstable power don't mix. Olea built a dedicated system for our cold rooms. Not a single degree of temperature variance in six months. My losses dropped from 18% to under 1%.", name: "Adanna I.", role: "Cold-Chain Logistics Manager", location: "Onitsha", initials: "AI", rating: 5 },
+  { quote: "Power cuts during dental procedures are unacceptable. Since installing the Olea 5KVA system we've had zero interruptions in 14 months. Patient confidence is up and so is revenue. Worth every naira.", name: "Dr. Yusuf K.", role: "Dental Surgeon", location: "Abuja", initials: "YK", rating: 5 },
+  { quote: "Our refrigeration systems used to cost ₦80,000 a month in diesel. With the Olea industrial system that's down to under ₦8,000. The ROI was faster than they projected. I only regret not doing it sooner.", name: "Blessing A.", role: "Supermarket Manager", location: "Port Harcourt", initials: "BA", rating: 5 },
 ];
 
 const ALL_TESTIMONIALS = [...TESTIMONIALS, ...EXTRA_TESTIMONIALS];
@@ -24,9 +32,18 @@ export default function TestimonialsPage() {
   return (
     <>
       {/* Hero */}
-      <section style={{ background: "var(--bg-dark)", color: "#fff", paddingTop: 160, paddingBottom: 80, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: 800, height: 800, background: "radial-gradient(circle, rgba(249,166,6,0.08) 0%, transparent 60%)", pointerEvents: "none" }} />
-        <div className="container" style={{ position: "relative", textAlign: "center" }}>
+      <section style={{ position: "relative", background: "var(--olea-green-900)", color: "#fff", paddingTop: 160, paddingBottom: 80, overflow: "hidden", minHeight: 500 }}>
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <Image
+            src="/images/services/consulting.jpg"
+            alt=""
+            fill
+            style={{ objectFit: "cover", objectPosition: "center top" }}
+            priority
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(7,41,31,0.90) 0%, rgba(7,41,31,0.70) 100%)" }} />
+        </div>
+        <div className="container" style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
           <span className="eyebrow">Client Reviews</span>
           <h1 className="t-display" style={{ color: "#fff", margin: "0 auto 20px", maxWidth: 700 }}>
             Real People. Real Power.<br />
@@ -64,12 +81,12 @@ export default function TestimonialsPage() {
       {/* Testimonials grid */}
       <section className="section section-bg">
         <div className="container">
-          <div style={{ columns: "3 300px", columnGap: 20 }}>
+          <div className="reviews-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }}>
             {ALL_TESTIMONIALS.map((t, i) => (
               <ScrollFade key={t.name + i} delay={i * 60}>
-                <div className="card card-hoverable" style={{ padding: 32, marginBottom: 20, breakInside: "avoid" }}>
+                <div className="card card-hoverable" style={{ padding: 32, flex: 1, display: "flex", flexDirection: "column" }}>
                   <div style={{ color: "var(--accent)", fontSize: 14, marginBottom: 14, letterSpacing: 2 }}>{"★".repeat(t.rating)}</div>
-                  <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--olea-ink)", margin: "0 0 20px", fontStyle: "italic" }}>"{t.quote}"</p>
+                  <p style={{ fontSize: 15, lineHeight: 1.65, color: "var(--olea-ink)", margin: "0 0 20px", fontStyle: "italic", flex: 1 }}>"{t.quote}"</p>
                   <hr style={{ height: 1, background: "var(--border-subtle)", border: 0, margin: "0 0 16px" }} />
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{ width: 44, height: 44, borderRadius: 9999, background: "linear-gradient(135deg, var(--olea-green-700), var(--olea-green-900))", color: "var(--accent)", fontWeight: 700, fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -97,6 +114,11 @@ export default function TestimonialsPage() {
           <Link href="/contact" className="btn btn-green">Get a Quote →</Link>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 960px) { .reviews-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 600px) { .reviews-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
     </>
   );
 }

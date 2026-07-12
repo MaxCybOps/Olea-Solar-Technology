@@ -2,6 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Clock, ChevronRight, Share2 } from "lucide-react";
+import Image from "next/image";
+
+const POST_IMAGES: Record<string, string> = {
+  b1: "/images/blog/solar-sizing.jpg",
+  b2: "/images/blog/factory-install.jpg",
+  b3: "/images/blog/battery-guide.jpg",
+  b4: "/images/services/mnt.jpg",
+  b5: "/images/services/consulting.jpg",
+};
 import { BLOG_POSTS, getBlogPostBySlug, getRelatedPosts } from "@/lib/blog-data";
 
 export async function generateStaticParams() {
@@ -28,9 +37,18 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
   return (
     <>
       {/* Hero */}
-      <section style={{ background: "var(--bg-dark)", color: "#fff", paddingTop: 148, paddingBottom: 64, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 70% 50%, rgba(249,166,6,0.10) 0%, transparent 60%)", pointerEvents: "none" }} />
-        <div className="container-narrow" style={{ position: "relative" }}>
+      <section style={{ position: "relative", background: "var(--olea-green-900)", color: "#fff", paddingTop: 148, paddingBottom: 64, overflow: "hidden", minHeight: 440 }}>
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <Image
+            src={POST_IMAGES[post.id] ?? "/images/blog-hero.jpg"}
+            alt=""
+            fill
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            priority
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(7,41,31,0.92) 0%, rgba(7,41,31,0.75) 100%)" }} />
+        </div>
+        <div className="container-narrow" style={{ position: "relative", zIndex: 1 }}>
           {/* Breadcrumb */}
           <nav style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "rgba(255,255,255,0.5)", marginBottom: 20, flexWrap: "wrap" }}>
             <Link href="/" style={{ color: "rgba(255,255,255,0.5)" }}>Home</Link>
@@ -133,10 +151,15 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
                   className="blog-card"
                   style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "var(--shadow-sm)", display: "flex", flexDirection: "column", textDecoration: "none", border: "1px solid var(--border-subtle)", transition: "var(--t-base)" }}
                 >
-                  <div style={{ aspectRatio: "16/10", background: "linear-gradient(135deg, var(--olea-green-700), var(--olea-green-900))", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                    <span style={{ fontSize: 44 }}>
-                      {p.category === "Energy Education" ? "⚡" : p.category === "Installation Stories" ? "🔧" : "🔬"}
-                    </span>
+                  <div style={{ aspectRatio: "16/10", position: "relative", overflow: "hidden" }}>
+                    <Image
+                      src={POST_IMAGES[p.id] ?? "/images/blog-hero.jpg"}
+                      alt={p.title}
+                      fill
+                      style={{ objectFit: "cover", transition: "transform 500ms" }}
+                      className="blog-card-img"
+                    />
+                    <div style={{ position: "absolute", inset: 0, background: "rgba(7,41,31,0.20)" }} />
                     <span style={{ position: "absolute", top: 12, left: 12, background: "var(--accent)", color: "var(--olea-ink)", padding: "3px 9px", borderRadius: 4, fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>{p.category}</span>
                   </div>
                   <div style={{ padding: "18px 20px 20px", flex: 1, display: "flex", flexDirection: "column" }}>
