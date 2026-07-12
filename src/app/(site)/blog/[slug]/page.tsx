@@ -61,7 +61,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           <span style={{ display: "inline-block", background: "var(--accent)", color: "var(--olea-ink)", padding: "4px 14px", borderRadius: 4, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 18 }}>
             {post.category}
           </span>
-          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(30px, 4.5vw, 52px)", lineHeight: 1.05, letterSpacing: "-0.02em", margin: "0 0 20px", color: "#fff" }}>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(38px, 5.5vw, 76px)", lineHeight: 1.04, letterSpacing: "-0.025em", margin: "0 0 20px", color: "#fff" }}>
             {post.title}
           </h1>
           <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", lineHeight: 1.6, margin: "0 0 28px", maxWidth: 640 }}>
