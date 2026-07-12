@@ -13,8 +13,8 @@ const POST_IMAGES: Record<string, string> = {
   b4:  "/images/gallery-3.jpg",
   b5:  "/images/gallery-5.jpg",
   b6:  "/images/gallery-1.jpg",
-  b7:  "/images/gallery-6.jpg",
-  b8:  "/images/gallery-4.jpg",
+  b7:  "/images/about/team-work.jpg",
+  b8:  "/images/about/team-smiling.jpg",
   b9:  "/images/gallery-2.jpg",
   b10: "/images/gallery-7.jpg",
 };
