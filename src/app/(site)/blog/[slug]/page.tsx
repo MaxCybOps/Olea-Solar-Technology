@@ -5,11 +5,16 @@ import { Clock, ChevronRight, Share2 } from "lucide-react";
 import Image from "next/image";
 
 const POST_IMAGES: Record<string, string> = {
-  b1: "/images/blog/solar-sizing.jpg",
-  b2: "/images/blog/factory-install.jpg",
-  b3: "/images/blog/battery-guide.jpg",
-  b4: "/images/services/mnt.jpg",
-  b5: "/images/services/consulting.jpg",
+  b1:  "/images/blog/solar-sizing.jpg",
+  b2:  "/images/blog/factory-install.jpg",
+  b3:  "/images/blog/battery-guide.jpg",
+  b4:  "/images/gallery-3.jpg",
+  b5:  "/images/gallery-5.jpg",
+  b6:  "/images/gallery-1.jpg",
+  b7:  "/images/gallery-6.jpg",
+  b8:  "/images/gallery-4.jpg",
+  b9:  "/images/gallery-2.jpg",
+  b10: "/images/gallery-7.jpg",
 };
 import { BLOG_POSTS, getBlogPostBySlug, getRelatedPosts } from "@/lib/blog-data";
 

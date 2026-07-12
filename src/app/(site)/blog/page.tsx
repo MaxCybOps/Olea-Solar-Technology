@@ -2,9 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import type { Metadata } from "next";
-import { Clock, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { Clock } from "lucide-react";
 import { BLOG_POSTS } from "@/lib/blog-data";
+
+const POST_IMAGES: Record<string, string> = {
+  b1:  "/images/blog/solar-sizing.jpg",
+  b2:  "/images/blog/factory-install.jpg",
+  b3:  "/images/blog/battery-guide.jpg",
+  b4:  "/images/gallery-3.jpg",
+  b5:  "/images/gallery-5.jpg",
+  b6:  "/images/gallery-1.jpg",
+  b7:  "/images/gallery-6.jpg",
+  b8:  "/images/gallery-4.jpg",
+  b9:  "/images/gallery-2.jpg",
+  b10: "/images/gallery-7.jpg",
+};
 
 const ALL_CATS = ["All", ...Array.from(new Set(BLOG_POSTS.map((p) => p.category)))];
 
@@ -17,23 +30,39 @@ export default function BlogPage() {
 
   return (
     <>
-      {/* Hero */}
-      <section style={{ background: "var(--bg-dark)", color: "#fff", paddingTop: 148, paddingBottom: 64, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", right: "-5%", top: 0, width: 500, height: 500, background: "radial-gradient(circle, rgba(249,166,6,0.10) 0%, transparent 60%)", pointerEvents: "none" }} />
-        <div className="container" style={{ position: "relative" }}>
+      {/* ── HERO ── */}
+      <section style={{ position: "relative", background: "var(--olea-green-900)", color: "#fff", paddingTop: 148, paddingBottom: 80, overflow: "hidden", minHeight: 440 }}>
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <Image
+            src="/images/blog-hero.jpg"
+            alt=""
+            fill
+            style={{ objectFit: "cover", objectPosition: "center" }}
+            priority
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(7,41,31,0.90) 0%, rgba(7,41,31,0.65) 100%)" }} />
+        </div>
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+          <nav style={{ fontSize: 13, color: "rgba(255,255,255,0.48)", marginBottom: 28 }}>
+            <Link href="/" style={{ color: "rgba(255,255,255,0.48)" }}>Home</Link>
+            <span style={{ margin: "0 8px" }}>›</span>
+            <span>Blog</span>
+          </nav>
           <span className="eyebrow">The Olea Journal</span>
-          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(40px, 5vw, 64px)", lineHeight: 1.05, letterSpacing: "-0.02em", margin: "0 0 14px", color: "#fff" }}>
-            Clean energy, explained.
+          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 20px", maxWidth: 600, lineHeight: 1.06 }}>
+            Clean energy,{" "}
+            <span style={{ color: "var(--accent)" }}>explained.</span>
           </h1>
-          <p style={{ fontSize: 17, color: "rgba(255,255,255,0.7)", maxWidth: 560, margin: 0, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.70)", maxWidth: 520, lineHeight: 1.65, margin: 0 }}>
             Practical guides, real installation stories, and the science of powering Africa — written by the engineers who do the work.
           </p>
         </div>
       </section>
 
-      {/* Content */}
+      {/* ── CONTENT ── */}
       <section style={{ background: "#fff", padding: "56px 0 96px" }}>
         <div className="container">
+
           {/* Category filters */}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 40 }}>
             {ALL_CATS.map((cat) => (
@@ -42,9 +71,9 @@ export default function BlogPage() {
                 onClick={() => setActiveCat(cat)}
                 style={{
                   fontSize: 13.5, fontWeight: 500, padding: "8px 18px", borderRadius: 9999, cursor: "pointer",
-                  background: activeCat === cat ? "var(--brand)" : "#fff",
+                  background: activeCat === cat ? "var(--olea-green-800)" : "#fff",
                   color: activeCat === cat ? "#fff" : "var(--olea-ink)",
-                  border: `1.5px solid ${activeCat === cat ? "var(--brand)" : "var(--border-subtle)"}`,
+                  border: `1.5px solid ${activeCat === cat ? "var(--olea-green-800)" : "var(--border-subtle)"}`,
                   transition: "var(--t-base)", fontFamily: "var(--font-sans)",
                 }}
               >
@@ -60,15 +89,19 @@ export default function BlogPage() {
               className="blog-featured"
               style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", borderRadius: 16, overflow: "hidden", boxShadow: "var(--shadow-lg)", marginBottom: 52, background: "#fff", textDecoration: "none" }}
             >
-              <div style={{ position: "relative", minHeight: 380, background: "linear-gradient(135deg, var(--olea-green-700), var(--olea-green-900))", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 60% 40%, rgba(249,166,6,0.2) 0%, transparent 60%)" }} />
-                <span style={{ fontSize: 80, position: "relative" }}>☀️</span>
-                <span style={{ position: "absolute", top: 18, left: 18, background: "var(--accent)", color: "var(--olea-ink)", padding: "4px 12px", borderRadius: 4, fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              <div style={{ position: "relative", minHeight: 380 }}>
+                <Image
+                  src={POST_IMAGES[featured.id] ?? "/images/blog/solar-sizing.jpg"}
+                  alt={featured.title}
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+                <span style={{ position: "absolute", top: 18, left: 18, background: "var(--accent)", color: "var(--olea-green-900)", padding: "4px 12px", borderRadius: 4, fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
                   {featured.category}
                 </span>
               </div>
               <div style={{ padding: "44px 40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                <div style={{ fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--accent-hover)", marginBottom: 14 }}>Featured</div>
+                <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--olea-green-700)", marginBottom: 14 }}>Featured</div>
                 <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(22px, 2.5vw, 30px)", lineHeight: 1.15, letterSpacing: "-0.02em", margin: "0 0 16px", color: "var(--olea-ink)" }}>
                   {featured.title}
                 </h2>
@@ -93,12 +126,15 @@ export default function BlogPage() {
                   className="blog-card"
                   style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "var(--shadow-sm)", display: "flex", flexDirection: "column", textDecoration: "none", border: "1px solid var(--border-subtle)", transition: "var(--t-base)" }}
                 >
-                  <div style={{ position: "relative", aspectRatio: "16/10", background: "linear-gradient(135deg, var(--olea-green-700), var(--olea-green-900))", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-                    <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 60% 40%, rgba(249,166,6,0.18) 0%, transparent 60%)" }} />
-                    <span style={{ fontSize: 48, position: "relative" }}>
-                      {post.category === "Energy Education" ? "⚡" : post.category === "Installation Stories" ? "🔧" : "🔬"}
-                    </span>
-                    <span style={{ position: "absolute", top: 14, left: 14, background: "var(--accent)", color: "var(--olea-ink)", padding: "3px 10px", borderRadius: 4, fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                  <div style={{ position: "relative", aspectRatio: "16/10", overflow: "hidden" }}>
+                    <Image
+                      src={POST_IMAGES[post.id] ?? "/images/blog/solar-sizing.jpg"}
+                      alt={post.title}
+                      fill
+                      style={{ objectFit: "cover", transition: "transform 500ms" }}
+                      className="blog-card-img"
+                    />
+                    <span style={{ position: "absolute", top: 14, left: 14, background: "var(--accent)", color: "var(--olea-green-900)", padding: "3px 10px", borderRadius: 4, fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase" }}>
                       {post.category}
                     </span>
                   </div>
@@ -119,10 +155,11 @@ export default function BlogPage() {
               <button onClick={() => setActiveCat("All")} className="btn btn-outline-dark" style={{ marginTop: 16 }}>Show all articles</button>
             </div>
           )}
+
         </div>
       </section>
 
-      {/* CTA */}
+      {/* ── CTA ── */}
       <div style={{ background: "var(--bg-page)", padding: "72px 0", borderTop: "1px solid var(--border-subtle)" }}>
         <div className="container" style={{ textAlign: "center" }}>
           <span className="eyebrow">Ready to get started?</span>
@@ -136,6 +173,7 @@ export default function BlogPage() {
         .blog-featured { transition: box-shadow 300ms; }
         .blog-featured:hover { box-shadow: var(--shadow-xl) !important; }
         .blog-card:hover { box-shadow: var(--shadow-md) !important; transform: translateY(-3px); }
+        .blog-card:hover .blog-card-img { transform: scale(1.05); }
         @media (max-width: 960px) { .blog-featured { grid-template-columns: 1fr !important; } }
         @media (max-width: 768px) { .blog-grid { grid-template-columns: 1fr 1fr !important; } }
         @media (max-width: 540px) { .blog-grid { grid-template-columns: 1fr !important; } }
