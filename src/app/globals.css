@@ -121,9 +121,9 @@ button { font-family: var(--font-sans); }
 .t-display {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(38px, 5.5vw, 78px);
-  line-height: 1.04;
-  letter-spacing: -0.025em;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 1.0;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 .headline-section {
