@@ -103,7 +103,7 @@ function TiltTile({ item }: TileProps) {
 
 export default function GallerySection() {
   return (
-    <section className="section section-dark" style={{ position: "relative" }}>
+    <section className="section section-dark hp-gallery" style={{ position: "relative" }}>
       <div className="container">
         <div style={{ textAlign: "center", maxWidth: 720, margin: "0 auto 56px" }}>
           <span className="eyebrow">Our Work</span>

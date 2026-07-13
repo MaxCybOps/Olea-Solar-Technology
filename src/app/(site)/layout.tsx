@@ -1,6 +1,7 @@
 import Navbar from "@/components/site/Navbar";
 import Footer from "@/components/site/Footer";
 import AIChat from "@/components/site/AIChat";
+import CartDrawer from "@/components/site/CartDrawer";
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       <main className="flex-1">{children}</main>
       <Footer />
       <AIChat />
+      <CartDrawer />
     </>
   );
 }

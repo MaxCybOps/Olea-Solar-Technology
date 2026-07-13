@@ -2,6 +2,15 @@
 
 import { useEffect, useRef } from "react";
 
+interface Particle {
+  x: number; y: number;
+  vx: number; vy: number;
+  r: number;
+  phase: number;
+  tSpeed: number;
+  isGold: boolean;
+}
+
 export default function HeroParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -12,57 +21,74 @@ export default function HeroParticles() {
     if (!ctx) return;
     let raf: number;
 
-    // Use parent dimensions so canvas fills the entire hero section
-    const resize = () => {
-      const parent = canvas.parentElement;
-      canvas.width = parent ? parent.offsetWidth : window.innerWidth;
-      canvas.height = parent ? parent.offsetHeight : window.innerHeight;
-    };
-
-    // Delay one frame so CSS layout has applied before we read dimensions
     requestAnimationFrame(() => {
-      resize();
+      const parent = canvas.parentElement;
+      const W = parent ? parent.offsetWidth : window.innerWidth;
+      const H = parent ? parent.offsetHeight : window.innerHeight;
+      canvas.width  = W;
+      canvas.height = H;
 
-      const particles = Array.from({ length: 70 }, () => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-        r: Math.random() * 1.8 + 0.5,
-        gold: Math.random() > 0.65,
-      }));
+      // Tight cluster: upper-left ~28% wide × ~45% tall
+      const ZW = W * 0.28;
+      const ZH = H * 0.45;
 
-      const tick = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach((p) => {
-          p.x += p.vx;
-          p.y += p.vy;
-          if (p.x < 0) p.x = canvas.width;
-          if (p.x > canvas.width) p.x = 0;
-          if (p.y < 0) p.y = canvas.height;
-          if (p.y > canvas.height) p.y = 0;
+      const N = Math.min(65, Math.floor((ZW * ZH) / 1800));
+
+      const pts: Particle[] = Array.from({ length: N }, () => {
+        const rx = Math.random();
+        const ry = Math.random();
+        return {
+          x:  Math.pow(rx, 1.6) * ZW,
+          y:  Math.pow(ry, 1.5) * ZH,
+          vx: (Math.random() - 0.5) * 0.14,
+          vy: (Math.random() - 0.55) * 0.10,
+          r:  Math.random() * 0.9 + 0.3,   // 0.3–1.2px — small plain dots
+          phase:  Math.random() * Math.PI * 2,
+          tSpeed: 0.0008 + Math.random() * 0.0012,
+          isGold: Math.random() < 0.70,    // ~70% gold to match screenshot
+        };
+      });
+
+      const tick = (t: number) => {
+        ctx.clearRect(0, 0, W, H);
+
+        pts.forEach((p) => {
+          // Gentle twinkle — alpha between 0.30 and 0.85, no glow
+          const tw = 0.30 + 0.55 * (Math.sin(t * p.tSpeed + p.phase) * 0.5 + 0.5);
+          const [cr, cg, cb] = p.isGold ? [249, 166, 6] : [170, 225, 195];
+
+          // Plain dot only — zero glow
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = p.gold ? "rgba(249,166,6,0.85)" : "rgba(218,235,221,0.5)";
+          ctx.fillStyle = `rgba(${cr},${cg},${cb},${tw})`;
           ctx.fill();
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x <= 0)  { p.x  = 0;  p.vx = Math.abs(p.vx);  }
+          if (p.x >= ZW) { p.x  = ZW; p.vx = -Math.abs(p.vx); }
+          if (p.y <= 0)  { p.y  = 0;  p.vy = Math.abs(p.vy);  }
+          if (p.y >= ZH) { p.y  = ZH; p.vy = -Math.abs(p.vy); }
         });
+
         raf = requestAnimationFrame(tick);
       };
-      tick();
+
+      raf = requestAnimationFrame(tick);
     });
 
-    const onResize = () => resize();
-    window.addEventListener("resize", onResize);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", onResize);
-    };
+    return () => { cancelAnimationFrame(raf); };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 2, width: "100%", height: "100%" }}
+      style={{
+        position: "absolute", inset: 0,
+        pointerEvents: "none", zIndex: 2,
+        width: "100%", height: "100%",
+      }}
     />
   );
 }

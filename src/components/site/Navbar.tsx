@@ -13,6 +13,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const itemCount = useCartStore((s) => s.items.reduce((sum, i) => sum + i.quantity, 0));
+  const openDrawer = useCartStore((s) => s.openDrawer);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -110,10 +111,10 @@ export default function Navbar() {
           {/* Right actions */}
           <div className="olea-nav-cta" style={{ display: "flex", alignItems: "center", gap: 20 }}>
             {/* Cart */}
-            <Link
-              href="/cart"
-              style={{ position: "relative", color: "#fff", opacity: 0.92, display: "flex" }}
-              title="View cart"
+            <button
+              onClick={openDrawer}
+              aria-label="View cart"
+              style={{ position: "relative", color: "#fff", opacity: 0.92, display: "flex", background: "transparent", border: "none", cursor: "pointer", padding: 0 }}
             >
               <ShoppingBag size={22} />
               {itemCount > 0 && (
@@ -138,6 +139,15 @@ export default function Navbar() {
                   {itemCount}
                 </span>
               )}
+            </button>
+
+            {/* Sign In */}
+            <Link
+              href="/sign-in"
+              style={{ display: "flex", alignItems: "center", gap: 6, color: "rgba(255,255,255,0.82)", fontSize: 14, fontWeight: 500, textDecoration: "none", whiteSpace: "nowrap" }}
+            >
+              <User size={16} />
+              Sign In
             </Link>
 
             <Link
@@ -222,6 +232,9 @@ export default function Navbar() {
         </nav>
 
         <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: 12, paddingTop: 24 }}>
+          <Link href="/sign-in" onClick={() => setMobileOpen(false)} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, padding: "13px 20px", border: "1.5px solid rgba(255,255,255,0.22)", borderRadius: 9999, fontSize: 15, fontWeight: 600, color: "#fff", fontFamily: "var(--font-sans)" }}>
+            <User size={16} /> Sign In
+          </Link>
           <Link href="/contact" className="btn btn-primary" style={{ justifyContent: "center" }} onClick={() => setMobileOpen(false)}>
             Get a Quote →
           </Link>

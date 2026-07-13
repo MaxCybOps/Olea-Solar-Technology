@@ -35,10 +35,10 @@ export default function TestimonialsPage() {
       <section style={{ position: "relative", background: "var(--olea-green-900)", color: "#fff", paddingTop: 160, paddingBottom: 80, overflow: "hidden", minHeight: 500 }}>
         <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
           <Image
-            src="/images/services/consulting.jpg"
+            src="/images/impact-community.jpg"
             alt=""
             fill
-            style={{ objectFit: "cover", objectPosition: "center top" }}
+            style={{ objectFit: "cover", objectPosition: "center center" }}
             priority
           />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(7,41,31,0.90) 0%, rgba(7,41,31,0.70) 100%)" }} />

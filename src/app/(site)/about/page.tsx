@@ -2,154 +2,172 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import ScrollFade from "@/components/site/ScrollFade";
+import CountUp from "@/components/site/CountUp";
+import { Zap, Sun, MapPin, Award, Globe, Cpu, Shield, Flag } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "About Us",
-  description: "We didn't start Olea because it was a good business idea. We started it because Africa deserves better.",
+  title: "About Us | Olea Technologies",
+  description: "Olea Technologies is a clean-energy company on a mission to end Africa's power uncertainty, one intelligently engineered system at a time.",
+};
+
+const STATS = [
+  { icon: "Zap",    value: "500+", label: "INSTALLATIONS" },
+  { icon: "Sun",    value: "2MW+", label: "CLEAN ENERGY"  },
+  { icon: "MapPin", value: "6",    label: "STATES SERVED" },
+  { icon: "Award",  value: "98%",  label: "SATISFACTION"  },
+  { icon: "Globe",  value: "10+",  label: "INDUSTRIES"    },
+];
+
+const ICON_MAP: Record<string, React.ComponentType<{ size?: number }>> = {
+  Zap, Sun, MapPin, Award, Globe,
 };
 
 const VALUES = [
-  { icon: "🏆", title: "Excellence", body: "We set the standard for what clean energy delivery looks like in Africa." },
-  { icon: "🤝", title: "Integrity", body: "We say what we mean and deliver what we promise. Every time." },
-  { icon: "💡", title: "Innovation", body: "We bring technology that thinks — not just panels that sit on rooftops." },
-  { icon: "🌱", title: "Sustainability", body: "Everything we build is designed to last and protect the planet." },
-  { icon: "🚀", title: "Empowerment", body: "We transfer knowledge and capacity with every installation." },
-  { icon: "🌍", title: "Impact", body: "We measure success by the lives we change, not just the megawatts we install." },
+  {
+    icon: <Cpu size={22} />,
+    title: "Engineered, not improvised",
+    body: "We build systems, not shortcuts. Every install is designed to perform for decades, measured twice, built once.",
+  },
+  {
+    icon: <Shield size={22} />,
+    title: "Accountable for life",
+    body: "We don't disappear after installation. The relationship starts at commissioning and lasts as long as the system does.",
+  },
+  {
+    icon: <Flag size={22} />,
+    title: "Africa-first, always",
+    body: "Built for African conditions, African ambitions, and African talent. We train and employ where we work.",
+  },
 ];
 
-const TEAM = [
-  { name: "Dozie", role: "Chief Executive Officer", initials: "DO", bio: "Visionary leader driving Olea's mission to power Africa's future." },
-  { name: "Operations Lead", role: "Chief Operations Officer", initials: "OL", bio: "Ensuring every installation meets Olea's world-class standards." },
-  { name: "Tech Lead", role: "Head of Engineering", initials: "TL", bio: "Building the smart systems that make our installations intelligent." },
-];
-
-const MILESTONES = [
-  { year: "2022", event: "Olea Technologies founded in Owerri, Imo State" },
-  { year: "2023", event: "First 50 residential installations completed" },
-  { year: "2024", event: "Expanded to commercial and industrial clients" },
-  { year: "2025", event: "Launched Smart Energy Monitoring platform" },
-  { year: "2026", event: "Digital platform launch — serving all of Nigeria" },
+const ROADMAP = [
+  { tag: "NOW",      dot: "var(--accent)",           place: "Owerri, Imo",     body: "Headquarters and our first installations, proving the model, home by home, business by business." },
+  { tag: "NEXT",     dot: "rgba(255,255,255,0.35)",  place: "Across Nigeria",  body: "State by state, powering homes and industry with the same standard of engineering." },
+  { tag: "THEN",     dot: "rgba(255,255,255,0.35)",  place: "West Africa",     body: "Taking clean, reliable energy regional, the same mission, a bigger map." },
+  { tag: "THE GOAL", dot: "rgba(255,255,255,0.35)",  place: "A powered Africa", body: "And beyond. Globally competitive, African at the core." },
 ];
 
 export default function AboutPage() {
   return (
     <>
-      {/* Hero banner */}
-      <section style={{ background: "var(--bg-dark)", color: "#fff", paddingTop: 160, paddingBottom: 80, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", right: "-5%", top: "0%", width: 500, height: 500, background: "radial-gradient(circle, rgba(249,166,6,0.12) 0%, transparent 60%)", pointerEvents: "none" }} />
-        <div className="container" style={{ position: "relative" }}>
-          <span className="eyebrow">About Olea Technologies</span>
-          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 20px", maxWidth: 700 }}>
-            Powering Africa's<br />
-            <span style={{ color: "var(--accent)" }}>Sustainable Future.</span>
-          </h1>
-          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", maxWidth: 580, lineHeight: 1.6 }}>
-            We didn't start Olea because it was a good business idea.<br />
-            We started it because Africa deserves better.
-          </p>
-          <nav style={{ marginTop: 16, fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-            <Link href="/" style={{ color: "rgba(255,255,255,0.5)" }}>Home</Link>
+      {/* ── HERO ── */}
+      <section style={{ position: "relative", background: "var(--olea-green-900)", color: "#fff", paddingTop: 160, paddingBottom: 100, overflow: "hidden", minHeight: 520 }}>
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <Image
+            src="/images/about-hero.jpg"
+            alt=""
+            fill
+            style={{ objectFit: "cover", objectPosition: "center top" }}
+            priority
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(7,41,31,0.90) 0%, rgba(7,41,31,0.68) 100%)" }} />
+        </div>
+        <div className="container" style={{ position: "relative", zIndex: 1 }}>
+          <nav style={{ fontSize: 13, color: "rgba(255,255,255,0.48)", marginBottom: 28 }}>
+            <Link href="/" style={{ color: "rgba(255,255,255,0.48)" }}>Home</Link>
             <span style={{ margin: "0 8px" }}>›</span>
             <span>About</span>
           </nav>
+          <span className="eyebrow">About Olea</span>
+          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 22px", maxWidth: 660, lineHeight: 1.06 }}>
+            We&apos;re not selling panels.<br />
+            We&apos;re selling{" "}
+            <span style={{ color: "var(--accent)" }}>freedom.</span>
+          </h1>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", maxWidth: 540, lineHeight: 1.65, margin: 0 }}>
+            Olea Technologies is a clean-energy company on a mission to end Africa&apos;s power uncertainty, one intelligently engineered system at a time.
+          </p>
         </div>
       </section>
 
-      {/* Opening statement */}
+      {/* ── STATS STRIP ── */}
+      <div className="hp-stats">
+        <div className="container">
+          <div className="hp-stats__grid">
+            {STATS.map((s, i) => {
+              const Icon = ICON_MAP[s.icon];
+              return (
+                <div key={s.label} className="hp-stats__item">
+                  {i > 0 && <span className="hp-stats__divider" />}
+                  <div className="hp-stats__icon">{Icon && <Icon size={20} />}</div>
+                  <div className="hp-stats__value"><CountUp value={s.value} /></div>
+                  <div className="hp-stats__label">{s.label}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── OUR STORY ── */}
       <section className="section section-white">
-        <div className="container-narrow" style={{ textAlign: "center" }}>
-          <ScrollFade>
-            <span className="eyebrow">Our Story</span>
-            <h2 className="headline-section" style={{ marginInline: "auto" }}>
-              Built for Africa. Built to last.
-            </h2>
-            <p style={{ fontSize: 18, lineHeight: 1.7, color: "var(--fg-2)", maxWidth: "65ch", margin: "0 auto 32px" }}>
-              Nigeria loses billions annually to power outages. Businesses die. Hospitals struggle. Families suffer.
-              Olea Technologies was born from a simple conviction: Africa has all the sunlight it needs. What it lacked
-              was the infrastructure, intelligence, and commitment to harness it properly.
-            </p>
-            <p style={{ fontSize: 18, lineHeight: 1.7, color: "var(--fg-2)", maxWidth: "65ch", margin: "0 auto" }}>
-              We started in Owerri, Imo State, with a vision that extends across the continent. Every system we install
-              is a step toward an Africa that doesn't beg for power — one that produces its own, cleanly and forever.
-            </p>
-          </ScrollFade>
+        <div className="container">
+          <div className="about-story-grid">
+            <ScrollFade from="left">
+              <div style={{ borderRadius: 20, overflow: "hidden", position: "relative", height: 420 }}>
+                <Image
+                  src="/images/about/team-work.jpg"
+                  alt="Olea Technologies team at work"
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+            </ScrollFade>
+            <ScrollFade delay={120} from="right">
+              <div>
+                <span className="eyebrow">Our Story</span>
+                <h2 className="headline-section" style={{ margin: "0 0 22px" }}>
+                  Born from a simple frustration.
+                </h2>
+                <p style={{ fontSize: 16, lineHeight: 1.75, color: "var(--fg-2)", margin: "0 0 16px" }}>
+                  Across Africa, brilliant homes and businesses are held back by one thing: power they can&apos;t rely on. Generators that drink diesel. Grids that vanish without warning. A constant, draining uncertainty.
+                </p>
+                <p style={{ fontSize: 16, lineHeight: 1.75, color: "var(--fg-2)", margin: "0 0 16px" }}>
+                  We started Olea to end that, not with a cheaper generator or a quick panel sale, but with real infrastructure. Systems engineered to perform for 25 years, monitored intelligently, and backed by a team that picks up the phone.
+                </p>
+                <p style={{ fontSize: 16, lineHeight: 1.75, color: "var(--fg-2)", margin: "0 0 28px", fontWeight: 600 }}>
+                  Most companies sell you panels. We sell you freedom, from NEPA, from generator costs, from uncertainty. Forever.
+                </p>
+                <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+                  <Link href="/contact" className="btn btn-primary">Talk to an Expert →</Link>
+                  <Link href="/services" className="btn btn-outline-dark">Our Services</Link>
+                </div>
+              </div>
+            </ScrollFade>
+          </div>
         </div>
       </section>
 
-      {/* Vision & Mission */}
+      {/* ── WHAT WE STAND FOR ── */}
       <section className="section section-bg">
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }} className="vm-grid">
-            <ScrollFade>
-              <div style={{ background: "var(--bg-dark)", color: "#fff", borderRadius: 16, padding: 48, position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "absolute", top: -40, right: -40, width: 200, height: 200, background: "radial-gradient(circle, rgba(249,166,6,0.15) 0%, transparent 60%)", pointerEvents: "none" }} />
-                <span className="eyebrow">Vision</span>
-                <h3 style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 700, color: "#fff", margin: "0 0 16px", lineHeight: 1.15 }}>
-                  A powered Africa.
-                </h3>
-                <p style={{ fontSize: 16, color: "rgba(255,255,255,0.72)", lineHeight: 1.7, margin: 0 }}>
-                  To power Africa's future through intelligent, sustainable, and transformative energy innovation —
-                  making reliable clean energy the norm, not the exception.
-                </p>
-              </div>
-            </ScrollFade>
-            <ScrollFade delay={100}>
-              <div style={{ background: "var(--accent)", borderRadius: 16, padding: 48, position: "relative", overflow: "hidden" }}>
-                <div style={{ position: "absolute", bottom: -40, left: -40, width: 200, height: 200, background: "radial-gradient(circle, rgba(11,61,46,0.15) 0%, transparent 60%)", pointerEvents: "none" }} />
-                <span style={{ fontSize: 13, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--olea-green-900)", opacity: 0.7, marginBottom: 16, display: "block" }}>Mission</span>
-                <h3 style={{ fontFamily: "var(--font-display)", fontSize: 28, fontWeight: 700, color: "var(--olea-green-900)", margin: "0 0 16px", lineHeight: 1.15 }}>
-                  Build. Empower. Transform.
-                </h3>
-                <p style={{ fontSize: 16, color: "var(--olea-green-800)", lineHeight: 1.7, margin: 0 }}>
-                  To provide reliable clean-energy infrastructure, smart technology solutions, and human-capital
-                  development that enable businesses, institutions, and communities to thrive sustainably.
-                </p>
-              </div>
-            </ScrollFade>
-          </div>
-        </div>
-      </section>
-
-      {/* Core Values */}
-      <section className="section section-white">
-        <div className="container">
-          <div style={{ textAlign: "center", marginBottom: 56 }}>
-            <span className="eyebrow">What We Stand For</span>
-            <h2 className="headline-section">Our Core Values</h2>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }} className="values-grid">
+          <ScrollFade>
+            <div style={{ textAlign: "center", marginBottom: 52 }}>
+              <span className="eyebrow">What We Stand For</span>
+              <h2 className="headline-section" style={{ marginInline: "auto" }}>
+                Three things we refuse<br />to compromise.
+              </h2>
+            </div>
+          </ScrollFade>
+          <div className="about-values-grid">
             {VALUES.map((v, i) => (
-              <ScrollFade key={v.title} delay={i * 60}>
-                <div className="card card-hoverable" style={{ padding: 32 }}>
-                  <div style={{ fontSize: 32, marginBottom: 16 }}>{v.icon}</div>
-                  <h4 style={{ fontWeight: 700, fontSize: 20, margin: "0 0 12px", color: "var(--olea-ink)" }}>{v.title}</h4>
-                  <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--fg-2)", margin: 0 }}>{v.body}</p>
-                </div>
-              </ScrollFade>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Timeline */}
-      <section className="section section-dark" style={{ position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: 800, height: 800, background: "radial-gradient(circle, rgba(249,166,6,0.06) 0%, transparent 60%)", pointerEvents: "none" }} />
-        <div className="container">
-          <div style={{ textAlign: "center", marginBottom: 64 }}>
-            <span className="eyebrow">Our Journey</span>
-            <h2 className="headline-section" style={{ color: "#fff" }}>Milestones</h2>
-          </div>
-          <div style={{ maxWidth: 720, margin: "0 auto", position: "relative" }}>
-            <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: 1, background: "rgba(255,255,255,0.10)", transform: "translateX(-50%)" }} />
-            {MILESTONES.map((m, i) => (
-              <ScrollFade key={m.year} delay={i * 80}>
-                <div style={{ display: "flex", gap: 32, marginBottom: 40, alignItems: "flex-start", flexDirection: i % 2 === 0 ? "row" : "row-reverse" }}>
-                  <div style={{ flex: 1, textAlign: i % 2 === 0 ? "right" : "left" }}>
-                    <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 32, color: "var(--accent)", display: "block" }}>{m.year}</span>
-                    <p style={{ fontSize: 16, color: "rgba(255,255,255,0.78)", lineHeight: 1.5, margin: 0 }}>{m.event}</p>
+              <ScrollFade key={v.title} delay={i * 80}>
+                <div className="card" style={{ padding: "36px 28px" }}>
+                  <div style={{
+                    width: 48, height: 48, borderRadius: 10,
+                    background: "var(--olea-green-50)",
+                    color: "var(--olea-green-700)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    marginBottom: 20,
+                  }}>
+                    {v.icon}
                   </div>
-                  <div style={{ width: 16, height: 16, borderRadius: 9999, background: "var(--accent)", flexShrink: 0, marginTop: 8, position: "relative", zIndex: 1 }} />
-                  <div style={{ flex: 1 }} />
+                  <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 19, color: "var(--olea-ink)", margin: "0 0 10px", lineHeight: 1.25 }}>
+                    {v.title}
+                  </h3>
+                  <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--fg-2)", margin: 0 }}>
+                    {v.body}
+                  </p>
                 </div>
               </ScrollFade>
             ))}
@@ -157,28 +175,112 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="section section-bg" style={{ textAlign: "center" }}>
-        <div className="container-narrow">
-          <span className="eyebrow">Work With Us</span>
-          <h2 className="headline-section" style={{ marginInline: "auto" }}>Ready to power your future?</h2>
-          <p className="lead" style={{ margin: "0 auto 32px" }}>
-            Whether you're a homeowner, business owner, or industrial facility — we have a solution for you.
-          </p>
-          <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
-            <Link href="/contact" className="btn btn-primary">Get a Free Assessment →</Link>
-            <Link href="/services" className="btn btn-outline-dark">View Our Services</Link>
+      {/* ── ROADMAP ── */}
+      <section className="section section-dark" style={{ position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%,-50%)", width: 600, height: 600, background: "radial-gradient(circle, rgba(249,166,6,0.07) 0%, transparent 65%)", pointerEvents: "none" }} />
+        <div className="container" style={{ position: "relative" }}>
+          <ScrollFade>
+            <div style={{ textAlign: "center", marginBottom: 24 }}>
+              <span className="eyebrow">Where We&apos;re Headed</span>
+              <h2 className="headline-section" style={{ color: "#fff", marginInline: "auto" }}>
+                We&apos;re just getting started.
+              </h2>
+              <p style={{ fontSize: 16, color: "rgba(255,255,255,0.60)", maxWidth: 520, marginInline: "auto", lineHeight: 1.6 }}>
+                We believe in being honest about where we are, and bold about where we&apos;re going.
+              </p>
+            </div>
+          </ScrollFade>
+          <div className="about-roadmap-grid">
+            {ROADMAP.map((r, i) => (
+              <ScrollFade key={r.tag} delay={i * 80}>
+                <div style={{
+                  background: i === 0 ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.03)",
+                  border: i === 0 ? "1px solid rgba(249,166,6,0.30)" : "1px solid rgba(255,255,255,0.08)",
+                  borderRadius: 14,
+                  padding: "28px 24px",
+                  height: "100%",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: 9999, background: r.dot, flexShrink: 0 }} />
+                    <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.55)" }}>
+                      {r.tag}
+                    </span>
+                  </div>
+                  <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 20, color: "#fff", margin: "0 0 10px", lineHeight: 1.2 }}>
+                    {r.place}
+                  </h3>
+                  <p style={{ fontSize: 13.5, lineHeight: 1.7, color: "rgba(255,255,255,0.55)", margin: 0 }}>
+                    {r.body}
+                  </p>
+                </div>
+              </ScrollFade>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── GOLD CTA ── */}
+      <section style={{ background: "var(--accent)", padding: "80px 0" }}>
+        <div className="container">
+          <div className="about-cta-grid">
+            <ScrollFade>
+              <div>
+                <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--olea-green-900)", opacity: 0.65, display: "block", marginBottom: 12 }}>
+                  Ready When You Are
+                </span>
+                <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(26px, 3.2vw, 44px)", color: "var(--olea-green-900)", margin: "0 0 10px", lineHeight: 1.1 }}>
+                  Power your home or<br />business with Olea.
+                </h2>
+                <p style={{ fontSize: 15, color: "var(--olea-green-900)", opacity: 0.70, margin: 0 }}>
+                  Talk to an energy expert today and take the first step toward permanent power independence.
+                </p>
+              </div>
+            </ScrollFade>
+            <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "center" }}>
+              <Link href="/contact" style={{ display: "inline-flex", alignItems: "center", background: "var(--olea-green-900)", color: "#fff", borderRadius: 9999, padding: "14px 28px", fontSize: 14.5, fontWeight: 700, fontFamily: "var(--font-sans)", textDecoration: "none" }}>
+                Talk to an Expert →
+              </Link>
+              <Link href="/services" style={{ display: "inline-flex", alignItems: "center", background: "transparent", color: "var(--olea-green-900)", border: "2px solid var(--olea-green-900)", borderRadius: 9999, padding: "13px 28px", fontSize: 14.5, fontWeight: 700, fontFamily: "var(--font-sans)", textDecoration: "none" }}>
+                Meet the Services →
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       <style>{`
-        @media (max-width: 768px) {
-          .vm-grid     { grid-template-columns: 1fr !important; }
-          .values-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        .about-story-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 64px;
+          align-items: center;
         }
-        @media (max-width: 480px) {
-          .values-grid { grid-template-columns: 1fr !important; }
+        .about-values-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+        .about-roadmap-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
+          margin-top: 48px;
+        }
+        .about-cta-grid {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 48px;
+          align-items: center;
+        }
+        @media (max-width: 1023px) {
+          .about-roadmap-grid { grid-template-columns: repeat(2, 1fr); }
+          .about-cta-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 767px) {
+          .about-story-grid  { grid-template-columns: 1fr; gap: 32px; }
+          .about-values-grid { grid-template-columns: 1fr; }
+          .about-roadmap-grid { grid-template-columns: 1fr; }
+          .about-cta-grid { grid-template-columns: 1fr; }
         }
       `}</style>
     </>

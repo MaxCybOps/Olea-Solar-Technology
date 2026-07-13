@@ -120,14 +120,14 @@ export default function AIChat() {
         {open ? <X size={22} /> : <MessageCircle size={24} />}
       </button>
 
-      {/* Chat window */}
+      {/* Chat window — visibility:hidden when closed prevents GPU white-box artifact */}
       <div
         style={{
           position: "fixed",
           bottom: 96,
           right: 24,
           zIndex: 95,
-          width: 360,
+          width: "min(360px, calc(100vw - 32px))",
           height: 480,
           background: "#fff",
           borderRadius: 20,
@@ -138,8 +138,9 @@ export default function AIChat() {
           transformOrigin: "bottom right",
           transform: open ? "scale(1) translateY(0)" : "scale(0.88) translateY(16px)",
           opacity: open ? 1 : 0,
+          visibility: open ? "visible" : "hidden",
           pointerEvents: open ? "auto" : "none",
-          transition: "transform 280ms cubic-bezier(0.22,1,0.36,1), opacity 220ms ease",
+          transition: "transform 280ms cubic-bezier(0.22,1,0.36,1), opacity 220ms ease, visibility 0ms linear 220ms",
         }}
         aria-hidden={!open}
       >

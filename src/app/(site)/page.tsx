@@ -83,6 +83,24 @@ export default function HomePage() {
         <div className="hp-hero__ribbon" />
       </section>
 
+      {/* ── MARQUEE STRIP ── */}
+      <div className="marquee-strip">
+        <div className="marquee-track">
+          {[
+            "Clean Energy Infrastructure", "Smart Energy Systems", "Industrial Solutions",
+            "Energy Consulting", "Maintenance & Support", "Energy Academy",
+            "500+ Installations", "25-Year Warranty", "2-Hour Response",
+            "Clean Energy Infrastructure", "Smart Energy Systems", "Industrial Solutions",
+            "Energy Consulting", "Maintenance & Support", "Energy Academy",
+            "500+ Installations", "25-Year Warranty", "2-Hour Response",
+          ].map((item, i) => (
+            <span key={i} className="marquee-item">
+              {item}<span className="marquee-sep"> ✦ </span>
+            </span>
+          ))}
+        </div>
+      </div>
+
       {/* ── STATS STRIP ── */}
       <div className="hp-stats">
         <div className="container">
