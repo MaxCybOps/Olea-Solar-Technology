@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Truck, ShieldCheck, Wrench, ChevronRight, Zap, Sun, BatteryCharging, Home, SlidersVertical, type LucideIcon } from "lucide-react";
 import { SEED_PRODUCTS, getProductBySlug } from "@/lib/products-data";
 import { formatPrice } from "@/lib/utils";
-import ProductCard, { CATEGORY_IMAGES } from "@/components/site/ProductCard";
+import ProductCard from "@/components/site/ProductCard";
 import AddToCartButton from "./AddToCartButton";
+import ProductGallery from "./ProductGallery";
 import type { ProductCategory } from "@/types";
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
@@ -47,7 +47,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   if (!product) notFound();
 
   const Icon = CATEGORY_ICONS[product.category] ?? Zap;
-  const categoryImage = CATEGORY_IMAGES[product.category] ?? "/images/services/cei.jpg";
 
   const related = SEED_PRODUCTS.filter(
     (p) => p.isActive && p.id !== product.id && (p.category === product.category || p.isFeatured)
@@ -73,16 +72,16 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   return (
     <>
       {/* ── Breadcrumb ── */}
-      <div style={{ background: "#fff", paddingTop: 110, borderBottom: "1px solid var(--border-subtle)" }}>
+      <div style={{ background: "var(--olea-green-900)", paddingTop: 110, borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
         <div className="container">
-          <nav style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "var(--fg-2)", paddingBottom: 16, flexWrap: "wrap" }}>
-            <Link href="/" style={{ color: "var(--fg-2)" }}>Home</Link>
+          <nav style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "rgba(255,255,255,0.5)", paddingBottom: 16, flexWrap: "wrap" }}>
+            <Link href="/" style={{ color: "rgba(255,255,255,0.5)" }}>Home</Link>
             <ChevronRight size={14} />
-            <Link href="/products" style={{ color: "var(--fg-2)" }}>Products</Link>
+            <Link href="/products" style={{ color: "rgba(255,255,255,0.5)" }}>Products</Link>
             <ChevronRight size={14} />
-            <span style={{ color: "var(--fg-2)" }}>{CATEGORY_LABELS[product.category]}</span>
+            <Link href="/products" style={{ color: "rgba(255,255,255,0.65)", textDecoration: "none" }}>{CATEGORY_LABELS[product.category]}</Link>
             <ChevronRight size={14} />
-            <span style={{ color: "var(--olea-ink)", fontWeight: 500 }}>{product.name}</span>
+            <span style={{ color: "#fff", fontWeight: 500 }}>{product.name}</span>
           </nav>
         </div>
       </div>
@@ -92,60 +91,13 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="container">
           <div className="pd-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "start" }}>
 
-            {/* ── Gallery ── */}
-            <div style={{ position: "sticky", top: 100 }}>
-
-              {/* Main image */}
-              <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", boxShadow: "var(--shadow-lg)", aspectRatio: "1/1", background: "var(--olea-green-50)" }}>
-                <Image
-                  src={categoryImage}
-                  alt={product.name}
-                  fill
-                  style={{ objectFit: "cover" }}
-                  priority
-                />
-                {discount && (
-                  <span style={{ position: "absolute", top: 16, left: 16, background: "#e53e3e", color: "#fff", fontSize: 13, fontWeight: 700, padding: "5px 12px", borderRadius: 6, zIndex: 2 }}>
-                    -{discount}% OFF
-                  </span>
-                )}
-                {product.isFeatured && !discount && (
-                  <span style={{ position: "absolute", top: 16, left: 16, background: "var(--accent)", color: "var(--olea-ink)", fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 6, zIndex: 2 }}>
-                    Featured
-                  </span>
-                )}
-              </div>
-
-              {/* Thumbnail strip */}
-              <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-                {[0, 1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    style={{
-                      flex: 1, aspectRatio: "1/1", borderRadius: 10, overflow: "hidden",
-                      border: `2px solid ${i === 0 ? "var(--accent)" : "var(--border-subtle)"}`,
-                      position: "relative", cursor: "pointer",
-                      boxShadow: i === 0 ? "0 0 0 1px var(--accent)" : "none",
-                    }}
-                  >
-                    <Image
-                      src={categoryImage}
-                      alt={product.name}
-                      fill
-                      style={{ objectFit: "cover", opacity: i === 0 ? 1 : 0.6 }}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* Share row */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 16, fontSize: 13, color: "var(--fg-2)" }}>
-                <span style={{ fontWeight: 500 }}>Share:</span>
-                {["WhatsApp", "Facebook", "X"].map((s) => (
-                  <span key={s} style={{ padding: "5px 12px", borderRadius: 9999, border: "1px solid var(--border-subtle)", cursor: "pointer", fontSize: 12, background: "#fff" }}>{s}</span>
-                ))}
-              </div>
-            </div>
+            {/* ── Gallery (client component — interactive) ── */}
+            <ProductGallery
+              category={product.category}
+              productName={product.name}
+              discount={discount}
+              isFeatured={product.isFeatured ?? false}
+            />
 
             {/* ── Info panel ── */}
             <div>
@@ -174,9 +126,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
               </div>
 
               {/* Price block */}
-              <div style={{ background: "var(--olea-green-50)", borderRadius: 14, padding: "20px 22px", marginBottom: 22, border: "1px solid var(--olea-green-100)" }}>
+              <div className="pd-price-block" style={{ background: "var(--olea-green-50)", borderRadius: 14, padding: "20px 22px", marginBottom: 22, border: "1px solid var(--olea-green-100)" }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 14, flexWrap: "wrap", marginBottom: discount ? 10 : 0 }}>
-                  <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 36, color: "var(--olea-ink)", fontVariantNumeric: "tabular-nums" }}>
+                  <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(28px, 4vw, 36px)", color: "var(--olea-ink)", fontVariantNumeric: "tabular-nums" }}>
                     {formatPrice(product.price)}
                   </span>
                   {product.compareAtPrice && (
@@ -218,18 +170,18 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
               {/* Add to cart + consult */}
               <AddToCartButton product={product} />
-              <Link href="/contact" className="btn btn-outline-dark" style={{ width: "100%", justifyContent: "center", marginBottom: 24, marginTop: 12 }}>
+              <Link href="/contact" className="btn btn-outline-dark" style={{ width: "100%", justifyContent: "center", marginBottom: 24, marginTop: 12, boxSizing: "border-box" }}>
                 Not sure this fits your setup? Talk to an engineer →
               </Link>
 
               {/* Trust badges */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, paddingTop: 22, borderTop: "1px solid var(--border-subtle)" }}>
+              <div className="pd-trust-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, paddingTop: 22, borderTop: "1px solid var(--border-subtle)" }}>
                 {[
                   { icon: Truck,       label: "Nationwide", sub: "Delivery" },
                   { icon: ShieldCheck, label: "Genuine",    sub: "Warranty" },
                   { icon: Wrench,      label: "Install",    sub: "Available" },
                 ].map(({ icon: TIcon, label, sub }) => (
-                  <div key={label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "14px 10px", borderRadius: 10, background: "var(--olea-green-50)", textAlign: "center" }}>
+                  <div key={label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "14px 8px", borderRadius: 10, background: "var(--olea-green-50)", textAlign: "center" }}>
                     <TIcon size={20} style={{ color: "var(--olea-green-700)" }} />
                     <div style={{ fontSize: 12, fontWeight: 700, color: "var(--olea-ink)", lineHeight: 1.2 }}>{label}<br /><span style={{ fontWeight: 400, color: "var(--fg-2)" }}>{sub}</span></div>
                   </div>
@@ -317,7 +269,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           .related-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
         @media (max-width: 540px) {
-          .related-grid { grid-template-columns: 1fr 1fr !important; }
+          .related-grid  { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+          .pd-price-block { padding: 16px 14px !important; }
+          .pd-trust-grid  { gap: 8px !important; }
         }
       `}</style>
     </>
