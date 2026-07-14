@@ -4,23 +4,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard, ShoppingBag, Package, Users, BarChart3,
-  Wrench, Sparkles, FileText, Bot, Settings, LogOut,
+  LayoutDashboard, ShoppingBag, Package, Users,
+  Sparkles, FileText, Settings, LogOut, Star,
 } from "lucide-react";
 
 const NAV_SECTIONS = [
   {
     label: "Operations",
     items: [
-      { id: "dashboard", label: "Dashboard",  href: "/admin",            icon: LayoutDashboard },
-      { id: "orders",    label: "Orders",     href: "/admin/orders",     icon: ShoppingBag,   badge: null },
-      { id: "products",  label: "Products",   href: "/admin/products",   icon: Package },
-      { id: "customers", label: "Customers",  href: "/admin/customers",  icon: Users },
+      { id: "dashboard", label: "Dashboard", href: "/admin",          icon: LayoutDashboard },
+      { id: "orders",    label: "Orders",    href: "/admin/orders",   icon: ShoppingBag },
+      { id: "products",  label: "Products",  href: "/admin/products", icon: Package },
+      { id: "customers", label: "Customers", href: "/admin/customers",icon: Users },
     ],
   },
   {
-    label: "Workflow",
+    label: "Engagement",
     items: [
+      { id: "reviews",  label: "Reviews",      href: "/admin/reviews",  icon: Star },
       { id: "leads",    label: "Leads",        href: "/admin/leads",    icon: Sparkles },
       { id: "content",  label: "Blog / CMS",   href: "/admin/content",  icon: FileText },
     ],
