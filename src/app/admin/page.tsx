@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { ShoppingBag, Users, TrendingUp, Zap, ArrowUpRight, ArrowDownRight, Package, AlertCircle } from "lucide-react";
+import { fetchLowStockProducts } from "@/lib/supabase/products";
 import { SEED_PRODUCTS } from "@/lib/products-data";
 
 export const metadata: Metadata = { title: "Dashboard" };
+export const dynamic = "force-dynamic";
 
 const KPIS = [
   { label: "Total Revenue", value: "₦47.2M", change: "+18.4%", up: true, icon: TrendingUp, color: "var(--olea-green-600)", bg: "rgba(26,122,74,0.10)" },
@@ -67,8 +69,14 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
 
 const REVENUE_DATA = [1.2, 2.1, 1.8, 3.4, 2.9, 4.1, 3.6, 5.2, 4.8, 6.1, 5.4, 7.2, 6.8, 5.9, 7.8, 6.4, 8.1, 7.6, 9.2, 8.7, 7.9, 9.8, 8.4, 10.2, 9.6, 11.1, 10.4, 9.8, 11.6, 12.3];
 
-export default function AdminDashboard() {
-  const lowStock = SEED_PRODUCTS.filter((p) => p.stockQuantity <= p.lowStockThreshold);
+export default async function AdminDashboard() {
+  const dbLowStock = await fetchLowStockProducts();
+  const lowStock = dbLowStock.length > 0
+    ? dbLowStock
+    : SEED_PRODUCTS.filter((p) => p.stockQuantity <= p.lowStockThreshold).map((p) => ({
+        id: p.id, name: p.name, slug: p.slug, category: p.category,
+        stock_quantity: p.stockQuantity, low_stock_threshold: p.lowStockThreshold,
+      }));
 
   return (
     <div style={{ flex: 1, overflowY: "auto", padding: 24 }}>
@@ -206,8 +214,8 @@ export default function AdminDashboard() {
                   <div style={{ fontSize: 13, fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
                   <div style={{ fontSize: 11, color: "var(--fg-2)" }}>{p.category}</div>
                 </div>
-                <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 8px", borderRadius: 4, background: p.stockQuantity === 0 ? "rgba(229,62,62,0.10)" : "rgba(249,166,6,0.15)", color: p.stockQuantity === 0 ? "#b53030" : "#8a5e00", whiteSpace: "nowrap" }}>
-                  {p.stockQuantity === 0 ? "Out of stock" : `${p.stockQuantity} left`}
+                <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 8px", borderRadius: 4, background: p.stock_quantity === 0 ? "rgba(229,62,62,0.10)" : "rgba(249,166,6,0.15)", color: p.stock_quantity === 0 ? "#b53030" : "#8a5e00", whiteSpace: "nowrap" }}>
+                  {p.stock_quantity === 0 ? "Out of stock" : `${p.stock_quantity} left`}
                 </span>
               </div>
             ))}

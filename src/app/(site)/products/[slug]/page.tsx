@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Truck, ShieldCheck, Wrench, ChevronRight, Zap, Sun, BatteryCharging, Home, SlidersVertical, type LucideIcon } from "lucide-react";
 import { SEED_PRODUCTS, getProductBySlug } from "@/lib/products-data";
+import { fetchProductBySlug, fetchAllActiveProducts } from "@/lib/supabase/products";
 import { formatPrice } from "@/lib/utils";
 import ProductCard from "@/components/site/ProductCard";
 import AddToCartButton from "./AddToCartButton";
@@ -27,13 +28,19 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
   accessories: "Accessories",
 };
 
+export const dynamic = "force-dynamic";
+
 export async function generateStaticParams() {
-  return SEED_PRODUCTS.map((p) => ({ slug: p.slug }));
+  const dbProducts = await fetchAllActiveProducts();
+  const slugs = dbProducts.length > 0
+    ? dbProducts.map((p) => ({ slug: p.slug }))
+    : SEED_PRODUCTS.map((p) => ({ slug: p.slug }));
+  return slugs;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = (await fetchProductBySlug(slug)) ?? getProductBySlug(slug);
   if (!product) return { title: "Product Not Found" };
   return {
     title: `${product.name} — Olea Technologies`,
@@ -43,13 +50,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = (await fetchProductBySlug(slug)) ?? getProductBySlug(slug);
   if (!product) notFound();
 
   const Icon = CATEGORY_ICONS[product.category] ?? Zap;
 
-  const related = SEED_PRODUCTS.filter(
-    (p) => p.isActive && p.id !== product.id && (p.category === product.category || p.isFeatured)
+  const allProducts = await fetchAllActiveProducts();
+  const pool = allProducts.length > 0 ? allProducts : SEED_PRODUCTS.filter((p) => p.isActive);
+  const related = pool.filter(
+    (p) => p.id !== product.id && (p.category === product.category || p.isFeatured)
   ).slice(0, 4);
 
   const isOutOfStock = product.stockQuantity === 0;

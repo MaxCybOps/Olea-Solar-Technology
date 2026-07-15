@@ -1,13 +1,15 @@
 "use client";
 
-import { useRef, type RefObject } from "react";
+import { useRef, useState, useEffect, type RefObject } from "react";
 import Link from "next/link";
 import {
   Zap, Sun, BatteryCharging, Home, Cpu, Wrench,
   ChevronLeft, ChevronRight, type LucideIcon,
 } from "lucide-react";
 import { SEED_PRODUCTS } from "@/lib/products-data";
+import { supabase } from "@/lib/supabase/client";
 import { formatPrice } from "@/lib/utils";
+import type { Product } from "@/types";
 
 const ICONS: Record<string, LucideIcon> = {
   inverters:          Zap,
@@ -28,7 +30,7 @@ const CAT: Record<string, string> = {
 };
 
 /* ── Single card — no ScrollFade wrapper so width/height work correctly ── */
-function ProductCard({ p, showDesc }: { p: (typeof SEED_PRODUCTS)[0]; showDesc?: boolean }) {
+function ProductCard({ p, showDesc }: { p: Product; showDesc?: boolean }) {
   const Icon = ICONS[p.category] ?? Zap;
   const inStock = p.stockQuantity > 0;
   return (
@@ -104,7 +106,7 @@ function ScrollRail({
   label, sub, products, showDesc, railRef,
 }: {
   label: string; sub: string;
-  products: typeof SEED_PRODUCTS;
+  products: Product[];
   showDesc?: boolean;
   railRef: RefObject<HTMLDivElement | null>;
 }) {
@@ -146,14 +148,38 @@ export default function FeaturedProducts() {
   const rail1 = useRef<HTMLDivElement>(null);
   const rail2 = useRef<HTMLDivElement>(null);
 
-  const active = SEED_PRODUCTS.filter((p) => p.isActive);
-  /* Row 1: featured first, fill to 8 */
+  const seedActive = SEED_PRODUCTS.filter((p) => p.isActive);
+  const [allProducts, setAllProducts] = useState<Product[]>(seedActive);
+
+  useEffect(() => {
+    supabase
+      .from("products")
+      .select("*")
+      .eq("is_active", true)
+      .order("is_featured", { ascending: false })
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        if (!data || data.length === 0) return;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setAllProducts((data as any[]).map((r): Product => ({
+          id: r.id, name: r.name, slug: r.slug,
+          description: r.description ?? "", shortDescription: r.short_description ?? "",
+          price: r.price, compareAtPrice: r.compare_at_price ?? undefined,
+          stockQuantity: r.stock_quantity, lowStockThreshold: r.low_stock_threshold,
+          category: r.category, images: r.images ?? [],
+          specifications: r.specifications ?? {}, isActive: r.is_active,
+          isFeatured: r.is_featured, requiresInstallation: false,
+          rating: r.rating ?? undefined, reviewCount: r.review_count ?? undefined,
+          createdAt: new Date(r.created_at), updatedAt: new Date(r.updated_at),
+        })));
+      });
+  }, []);
+
   const row1 = [
-    ...active.filter((p) => p.isFeatured),
-    ...active.filter((p) => !p.isFeatured),
+    ...allProducts.filter((p) => p.isFeatured),
+    ...allProducts.filter((p) => !p.isFeatured),
   ].slice(0, 8);
-  /* Row 2: full catalogue */
-  const row2 = active;
+  const row2 = allProducts;
 
   return (
     <section className="section section-white">
