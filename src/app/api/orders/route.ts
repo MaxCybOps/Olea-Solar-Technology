@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { prisma } from "@/lib/prisma";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import { generateOrderRef } from "@/lib/utils";
 
 const orderSchema = z.object({
@@ -32,33 +32,44 @@ export async function POST(req: NextRequest) {
     const total = subtotal + deliveryFee;
     const orderNumber = generateOrderRef();
 
-    const order = await prisma.order.create({
-      data: {
-        orderNumber,
-        customerName: data.customerName,
-        customerEmail: data.customerEmail,
-        customerPhone: data.customerPhone,
-        deliveryAddress: data.deliveryAddress,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: order, error: orderErr } = await (supabaseAdmin.from("orders") as any)
+      .insert({
+        order_number: orderNumber,
+        customer_name: data.customerName,
+        customer_email: data.customerEmail,
+        customer_phone: data.customerPhone,
+        shipping_address: data.deliveryAddress,
         subtotal,
-        deliveryFee,
+        shipping_fee: deliveryFee,
         total,
-        status: "PENDING",
-        paymentStatus: "PENDING",
-        notes: data.notes,
-        items: {
-          create: data.items.map((i) => ({
-            productId: i.productId,
-            productName: i.productName,
-            productPrice: i.productPrice,
-            quantity: i.quantity,
-            subtotal: i.productPrice * i.quantity,
-          })),
-        },
-      },
-      include: { items: true },
-    });
+        status: "pending",
+        payment_status: "pending",
+        notes: data.notes ?? null,
+      })
+      .select()
+      .single();
 
-    return NextResponse.json({ success: true, orderId: order.id, orderNumber: order.orderNumber, total: order.total }, { status: 201 });
+    if (orderErr) throw orderErr;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error: itemsErr } = await (supabaseAdmin.from("order_items") as any).insert(
+      data.items.map((i) => ({
+        order_id: order.id,
+        product_id: i.productId,
+        product_name: i.productName,
+        unit_price: i.productPrice,
+        quantity: i.quantity,
+        total_price: i.productPrice * i.quantity,
+      }))
+    );
+
+    if (itemsErr) throw itemsErr;
+
+    return NextResponse.json(
+      { success: true, orderId: order.id, orderNumber: order.order_number, total: order.total },
+      { status: 201 }
+    );
   } catch (err) {
     if (err instanceof z.ZodError) {
       return NextResponse.json({ error: "Invalid input", details: err.issues }, { status: 400 });

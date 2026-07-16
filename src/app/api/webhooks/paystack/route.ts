@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { prisma } from "@/lib/prisma";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 export async function POST(req: NextRequest) {
-  const body = await req.text();
+  const body      = await req.text();
   const signature = req.headers.get("x-paystack-signature") ?? "";
 
-  // Validate webhook signature
   const hash = crypto
     .createHmac("sha512", process.env.PAYSTACK_WEBHOOK_SECRET ?? "")
     .update(body)
@@ -23,12 +22,19 @@ export async function POST(req: NextRequest) {
     if (!reference) return NextResponse.json({ received: true });
 
     try {
-      const order = await prisma.order.findFirst({ where: { paymentReference: reference } });
-      if (order && order.paymentStatus !== "PAID") {
-        await prisma.order.update({
-          where: { id: order.id },
-          data: { paymentStatus: "PAID", status: "PAID" },
-        });
+      const { data: order } = await supabaseAdmin
+        .from("orders")
+        .select("id, payment_status")
+        .eq("payment_reference", reference)
+        .maybeSingle();
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const row = order as any;
+      if (row && row.payment_status !== "paid") {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (supabaseAdmin.from("orders") as any)
+          .update({ payment_status: "paid", status: "confirmed" })
+          .eq("id", row.id);
       }
     } catch (err) {
       console.error("Webhook handler error:", err);
