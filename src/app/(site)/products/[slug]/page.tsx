@@ -30,14 +30,6 @@ const CATEGORY_LABELS: Record<ProductCategory, string> = {
 
 export const dynamic = "force-dynamic";
 
-export async function generateStaticParams() {
-  const dbProducts = await fetchAllActiveProducts();
-  const slugs = dbProducts.length > 0
-    ? dbProducts.map((p) => ({ slug: p.slug }))
-    : SEED_PRODUCTS.map((p) => ({ slug: p.slug }));
-  return slugs;
-}
-
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const product = (await fetchProductBySlug(slug)) ?? getProductBySlug(slug);

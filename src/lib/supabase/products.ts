@@ -27,59 +27,79 @@ export function mapRowToProduct(row: ProductRow): Product {
 }
 
 export async function fetchAllActiveProducts(): Promise<Product[]> {
-  const { data, error } = await supabaseAdmin
-    .from("products")
-    .select("*")
-    .eq("is_active", true)
-    .order("is_featured", { ascending: false })
-    .order("created_at", { ascending: false });
+  try {
+    const { data, error } = await supabaseAdmin
+      .from("products")
+      .select("*")
+      .eq("is_active", true)
+      .order("is_featured", { ascending: false })
+      .order("created_at", { ascending: false });
 
-  if (error || !data) return [];
-  return (data as unknown as ProductRow[]).map(mapRowToProduct);
+    if (error || !data) return [];
+    return (data as unknown as ProductRow[]).map(mapRowToProduct);
+  } catch {
+    return [];
+  }
 }
 
 export async function fetchProductBySlug(slug: string): Promise<Product | null> {
-  const { data } = await supabaseAdmin
-    .from("products")
-    .select("*")
-    .eq("slug", slug)
-    .eq("is_active", true)
-    .maybeSingle();
+  try {
+    const { data } = await supabaseAdmin
+      .from("products")
+      .select("*")
+      .eq("slug", slug)
+      .eq("is_active", true)
+      .maybeSingle();
 
-  if (!data) return null;
-  return mapRowToProduct(data as unknown as ProductRow);
+    if (!data) return null;
+    return mapRowToProduct(data as unknown as ProductRow);
+  } catch {
+    return null;
+  }
 }
 
 export async function fetchFeaturedProducts(): Promise<Product[]> {
-  const { data } = await supabaseAdmin
-    .from("products")
-    .select("*")
-    .eq("is_featured", true)
-    .eq("is_active", true)
-    .order("created_at", { ascending: false });
+  try {
+    const { data } = await supabaseAdmin
+      .from("products")
+      .select("*")
+      .eq("is_featured", true)
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
 
-  if (!data) return [];
-  return (data as unknown as ProductRow[]).map(mapRowToProduct);
+    if (!data) return [];
+    return (data as unknown as ProductRow[]).map(mapRowToProduct);
+  } catch {
+    return [];
+  }
 }
 
 export async function fetchProductSlugs(): Promise<string[]> {
-  const { data } = await supabaseAdmin
-    .from("products")
-    .select("slug")
-    .eq("is_active", true);
+  try {
+    const { data } = await supabaseAdmin
+      .from("products")
+      .select("slug")
+      .eq("is_active", true);
 
-  return (data as unknown as { slug: string }[])?.map((r) => r.slug) ?? [];
+    return (data as unknown as { slug: string }[])?.map((r) => r.slug) ?? [];
+  } catch {
+    return [];
+  }
 }
 
 export async function fetchLowStockProducts(): Promise<Pick<ProductRow, "id" | "name" | "slug" | "category" | "stock_quantity" | "low_stock_threshold">[]> {
-  // Supabase JS client doesn't support column-to-column comparisons, so filter in JS
-  const { data } = await supabaseAdmin
-    .from("products")
-    .select("id, name, slug, category, stock_quantity, low_stock_threshold")
-    .eq("is_active", true)
-    .order("stock_quantity", { ascending: true });
+  try {
+    // Supabase JS client doesn't support column-to-column comparisons, so filter in JS
+    const { data } = await supabaseAdmin
+      .from("products")
+      .select("id, name, slug, category, stock_quantity, low_stock_threshold")
+      .eq("is_active", true)
+      .order("stock_quantity", { ascending: true });
 
-  if (!data) return [];
-  type Row = { id: string; name: string; slug: string; category: string; stock_quantity: number; low_stock_threshold: number };
-  return (data as unknown as Row[]).filter((p) => p.stock_quantity <= p.low_stock_threshold);
+    if (!data) return [];
+    type Row = { id: string; name: string; slug: string; category: string; stock_quantity: number; low_stock_threshold: number };
+    return (data as unknown as Row[]).filter((p) => p.stock_quantity <= p.low_stock_threshold);
+  } catch {
+    return [];
+  }
 }
