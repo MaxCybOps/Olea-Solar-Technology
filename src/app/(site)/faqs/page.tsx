@@ -63,11 +63,11 @@ export default function FAQsPage() {
             <span>FAQs</span>
           </nav>
           <span className="eyebrow">Questions &amp; Answers</span>
-          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 20px", maxWidth: 580, lineHeight: 1.06 }}>
+          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 22px", maxWidth: 740, lineHeight: 1.06 }}>
             Everything you<br />
             <span style={{ color: "var(--accent)" }}>wanted to ask.</span>
           </h1>
-          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.70)", maxWidth: 500, lineHeight: 1.65, margin: 0 }}>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.70)", maxWidth: 640, lineHeight: 1.7, margin: 0 }}>
             Straight answers about cost, installation, warranties, and what it&apos;s really like to go solar with Olea.
           </p>
         </div>

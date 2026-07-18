@@ -60,9 +60,9 @@
   --t-base:       250ms cubic-bezier(0.22,1,0.36,1);
   --t-slow:       400ms cubic-bezier(0.22,1,0.36,1);
 
-  --container:        1240px;
-  --container-wide:   1440px;
-  --container-narrow: 840px;
+  --container:        1360px;
+  --container-wide:   1560px;
+  --container-narrow: 980px;
 }
 
 /* ── Tailwind v4 theme extension ── */
@@ -106,12 +106,12 @@ img { max-width: 100%; }
 button { font-family: var(--font-sans); }
 
 /* ── Layout ── */
-.container        { max-width: var(--container);        margin: 0 auto; padding-inline: 24px; }
-.container-wide   { max-width: var(--container-wide);   margin: 0 auto; padding-inline: 24px; }
-.container-narrow { max-width: var(--container-narrow); margin: 0 auto; padding-inline: 24px; }
+.container        { max-width: var(--container);        margin: 0 auto; padding-inline: 32px; }
+.container-wide   { max-width: var(--container-wide);   margin: 0 auto; padding-inline: 32px; }
+.container-narrow { max-width: var(--container-narrow); margin: 0 auto; padding-inline: 32px; }
 
-.section    { padding: 80px 0; }
-.section-sm { padding: 52px 0; }
+.section    { padding: 96px 0; }
+.section-sm { padding: 64px 0; }
 .section-dark  { background: var(--bg-dark); color: #fff; }
 .section-white { background: #fff; }
 /* No grid texture on section-bg — was causing white-line artifacts at clip-path boundaries */
@@ -145,10 +145,10 @@ button { font-family: var(--font-sans); }
   display: block;
 }
 .lead {
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 16.5px;
+  line-height: 1.72;
   color: var(--fg-2);
-  max-width: 58ch;
+  max-width: 66ch;
   margin: 0;
 }
 .section-dark .lead    { color: rgba(255,255,255,0.68); }
@@ -240,10 +240,10 @@ button { font-family: var(--font-sans); }
 .hp-hero__glow--gold  { top: 18%; right: -8%;   width: 480px; height: 480px; background: radial-gradient(circle, rgba(249,166,6,0.15) 0%, transparent 60%); }
 .hp-hero__glow--green { bottom: -18%; left: -12%; width: 560px; height: 560px; background: radial-gradient(circle, rgba(26,122,74,0.26) 0%, transparent 65%); }
 .hp-hero__content { position: relative; z-index: 3; width: 100%; }
-.hp-hero__inner { max-width: 820px; }
+.hp-hero__inner { max-width: 960px; }
 .hp-hero__headline { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 5.8vw, 86px); line-height: 0.97; letter-spacing: -0.025em; color: #fff; margin: 0 0 20px; text-wrap: balance; }
 .hp-hero__gold { color: var(--accent); }
-.hp-hero__sub  { font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.74); max-width: 570px; margin: 0 0 32px; }
+.hp-hero__sub  { font-size: 18px; line-height: 1.68; color: rgba(255,255,255,0.74); max-width: 660px; margin: 0 0 34px; }
 .hp-hero__ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 .hp-hero__scroll { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; color: #fff; z-index: 4; }
 .hp-hero__scroll-line { width: 1px; height: 32px; background: rgba(255,255,255,0.35); position: relative; overflow: hidden; }
@@ -280,7 +280,7 @@ button { font-family: var(--font-sans); }
 /* ══════════════════════════════════════════════════════════
    SERVICES
    ══════════════════════════════════════════════════════════ */
-.hp-section-head { text-align: center; margin-bottom: 40px; max-width: 640px; margin-inline: auto; }
+.hp-section-head { text-align: center; margin-bottom: 48px; max-width: 780px; margin-inline: auto; }
 .hp-svc__grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; align-items: stretch; }
 
 /* Cards fill their ScrollFade wrapper fully */
@@ -310,7 +310,7 @@ button { font-family: var(--font-sans); }
   padding-bottom: 80px;
 }
 .hp-why__glow { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 700px; height: 700px; background: radial-gradient(circle, rgba(249,166,6,0.07) 0%, transparent 60%); pointer-events: none; }
-.hp-why__head { text-align: center; max-width: 740px; margin: 0 auto; position: relative; }
+.hp-why__head { text-align: center; max-width: 860px; margin: 0 auto; position: relative; }
 .hp-why__headline { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 3.8vw, 56px); line-height: 1.06; letter-spacing: -0.02em; margin: 0 0 16px; color: #fff; }
 .hp-why__gold { color: var(--accent); }
 .hp-why__sub  { font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.64); margin: 0; }
@@ -388,7 +388,7 @@ button { font-family: var(--font-sans); }
 
 /* ── 1024–1279px Standard Laptop ── */
 @media (max-width: 1279px) {
-  .hp-hero__inner    { max-width: 700px; }
+  .hp-hero__inner    { max-width: 820px; }
   .hp-hero__headline { font-size: clamp(36px, 5.2vw, 68px); }
 }
 

@@ -126,11 +126,11 @@ export default function ServicesPage() {
             <span>Services</span>
           </nav>
           <span className="eyebrow">What We Do</span>
-          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 22px", maxWidth: 660, lineHeight: 1.06 }}>
+          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 24px", maxWidth: 820, lineHeight: 1.06 }}>
             Six divisions.<br />
             <span style={{ color: "var(--accent)" }}>One powered Africa.</span>
           </h1>
-          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", maxWidth: 540, lineHeight: 1.65, margin: 0 }}>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", maxWidth: 680, lineHeight: 1.7, margin: 0 }}>
             Everything we build is designed for scale, reliability, and decades of performance.
           </p>
         </div>

@@ -165,7 +165,7 @@ export default function ProductsPageClient({ products }: { products: Product[] }
             Equipment built for<br />
             <span style={{ color: "var(--accent)" }}>African conditions.</span>
           </h1>
-          <p style={{ fontSize: 17, color: "rgba(255,255,255,0.70)", maxWidth: 560, margin: 0, lineHeight: 1.6 }}>
+          <p style={{ fontSize: 17, color: "rgba(255,255,255,0.70)", maxWidth: 680, margin: 0, lineHeight: 1.7 }}>
             Inverters, panels, batteries, and complete systems. Vetted brands. Real warranties. Installed by Olea engineers.
           </p>
         </div>

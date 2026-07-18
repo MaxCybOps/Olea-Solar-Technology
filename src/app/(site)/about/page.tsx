@@ -69,12 +69,12 @@ export default function AboutPage() {
             <span>About</span>
           </nav>
           <span className="eyebrow">About Olea</span>
-          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 22px", maxWidth: 660, lineHeight: 1.06 }}>
+          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 24px", maxWidth: 820, lineHeight: 1.06 }}>
             We&apos;re not selling panels.<br />
             We&apos;re selling{" "}
             <span style={{ color: "var(--accent)" }}>freedom.</span>
           </h1>
-          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", maxWidth: 540, lineHeight: 1.65, margin: 0 }}>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", maxWidth: 680, lineHeight: 1.7, margin: 0 }}>
             Olea Technologies is a clean-energy company on a mission to end Africa&apos;s power uncertainty, one intelligently engineered system at a time.
           </p>
         </div>
@@ -185,7 +185,7 @@ export default function AboutPage() {
               <h2 className="headline-section" style={{ color: "#fff", marginInline: "auto" }}>
                 We&apos;re just getting started.
               </h2>
-              <p style={{ fontSize: 16, color: "rgba(255,255,255,0.60)", maxWidth: 520, marginInline: "auto", lineHeight: 1.6 }}>
+              <p style={{ fontSize: 16, color: "rgba(255,255,255,0.60)", maxWidth: 640, marginInline: "auto", lineHeight: 1.7 }}>
                 We believe in being honest about where we are, and bold about where we&apos;re going.
               </p>
             </div>

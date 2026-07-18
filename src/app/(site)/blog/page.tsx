@@ -49,11 +49,11 @@ export default function BlogPage() {
             <span>Blog</span>
           </nav>
           <span className="eyebrow">The Olea Journal</span>
-          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 20px", maxWidth: 600, lineHeight: 1.06 }}>
+          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 22px", maxWidth: 760, lineHeight: 1.06 }}>
             Clean energy,{" "}
             <span style={{ color: "var(--accent)" }}>explained.</span>
           </h1>
-          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.70)", maxWidth: 520, lineHeight: 1.65, margin: 0 }}>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.70)", maxWidth: 660, lineHeight: 1.7, margin: 0 }}>
             Practical guides, real installation stories, and the science of powering Africa — written by the engineers who do the work.
           </p>
         </div>

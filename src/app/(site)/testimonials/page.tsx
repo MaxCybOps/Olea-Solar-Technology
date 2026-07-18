@@ -45,11 +45,11 @@ export default function TestimonialsPage() {
         </div>
         <div className="container" style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
           <span className="eyebrow">Client Reviews</span>
-          <h1 className="t-display" style={{ color: "#fff", margin: "0 auto 20px", maxWidth: 700 }}>
+          <h1 className="t-display" style={{ color: "#fff", margin: "0 auto 22px", maxWidth: 860 }}>
             Real People. Real Power.<br />
             <span style={{ color: "var(--accent)" }}>Real Results.</span>
           </h1>
-          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", maxWidth: 540, lineHeight: 1.6, margin: "0 auto" }}>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", maxWidth: 680, lineHeight: 1.7, margin: "0 auto" }}>
             Don't take our word for it. Here's what our clients say about life after Olea.
           </p>
         </div>

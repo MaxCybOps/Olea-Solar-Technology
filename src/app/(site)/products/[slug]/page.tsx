@@ -253,7 +253,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(24px, 3.5vw, 40px)", lineHeight: 1.08, margin: "0 0 12px", color: "var(--olea-green-900)" }}>
               Want it installed, not just delivered?
             </h2>
-            <p style={{ fontSize: 16, color: "var(--olea-green-800)", margin: 0, maxWidth: 520 }}>
+            <p style={{ fontSize: 16, color: "var(--olea-green-800)", margin: 0, maxWidth: 620, lineHeight: 1.65 }}>
               Our engineers can size, supply, and install a complete system around this product.
             </p>
           </div>

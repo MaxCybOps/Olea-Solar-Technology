@@ -78,11 +78,11 @@ export default function ContactPage() {
             <span>Contact</span>
           </nav>
           <span className="eyebrow">Get In Touch</span>
-          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 20px", maxWidth: 560, lineHeight: 1.06 }}>
+          <h1 className="t-display" style={{ color: "#fff", margin: "0 0 22px", maxWidth: 720, lineHeight: 1.06 }}>
             Let&apos;s talk about<br />
             your <span style={{ color: "var(--accent)" }}>power.</span>
           </h1>
-          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.70)", maxWidth: 520, lineHeight: 1.65, margin: 0 }}>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.70)", maxWidth: 660, lineHeight: 1.7, margin: 0 }}>
             Tell us what you&apos;re running and where. We respond to every inquiry within 2 business hours, because your energy future shouldn&apos;t wait.
           </p>
         </div>

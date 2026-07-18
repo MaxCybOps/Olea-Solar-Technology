@@ -69,7 +69,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(48px, 7vw, 96px)", lineHeight: 1.0, letterSpacing: "-0.03em", margin: "0 0 20px", color: "#fff" }}>
             {post.title}
           </h1>
-          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", lineHeight: 1.6, margin: "0 0 28px", maxWidth: 640 }}>
+          <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", lineHeight: 1.7, margin: "0 0 28px", maxWidth: 720 }}>
             {post.excerpt}
           </p>
 
@@ -91,7 +91,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
       {/* Article body */}
       <section style={{ background: "#fff", padding: "64px 0 80px" }}>
         <div className="container-narrow">
-          <div style={{ maxWidth: 720, margin: "0 auto" }}>
+          <div style={{ maxWidth: 780, margin: "0 auto" }}>
             {post.body.map((block, i) => {
               if (block.type === "h") {
                 return (
