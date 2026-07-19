@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const product = (await fetchProductBySlug(slug)) ?? getProductBySlug(slug);
   if (!product) return { title: "Product Not Found" };
   return {
-    title: `${product.name} — Olea Technologies`,
+    title: `${product.name} | Olea Technologies`,
     description: product.shortDescription,
   };
 }
@@ -61,7 +61,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
     isOutOfStock
       ? { text: "Out of stock",                                     color: "#e53e3e", bg: "rgba(229,62,62,0.10)" }
       : isLowStock
-      ? { text: `Low stock — only ${product.stockQuantity} left`,   color: "#a96f00", bg: "rgba(249,166,6,0.15)" }
+      ? { text: `Low stock, only ${product.stockQuantity} left`,   color: "#a96f00", bg: "rgba(249,166,6,0.15)" }
       : { text: "In stock · Ready to ship",                         color: "#1d6b3f", bg: "rgba(56,161,105,0.12)" };
 
   const discount = product.compareAtPrice && product.compareAtPrice > product.price
@@ -92,7 +92,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <div className="container">
           <div className="pd-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 56, alignItems: "start" }}>
 
-            {/* ── Gallery (client component — interactive) ── */}
+            {/* ── Gallery (client component, interactive) ── */}
             <ProductGallery
               category={product.category}
               productName={product.name}
@@ -158,7 +158,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                       <div style={{ height: "100%", width: `${stockPct}%`, background: "#e53e3e", borderRadius: 3 }} />
                     </div>
                     <div style={{ fontSize: 11, color: "#b53030", fontWeight: 600, marginTop: 5 }}>
-                      Hurry — only {product.stockQuantity} units remaining
+                      Hurry, only {product.stockQuantity} units remaining
                     </div>
                   </div>
                 )}

@@ -22,7 +22,7 @@ export const SERVICES = [
     name: "Clean Energy Infrastructure",
     blurb: "Complete solar systems engineered for 25+ years of performance.",
     description:
-      "Power that never quits. We design and deploy complete solar energy systems for residential, commercial, and industrial clients. Every installation is engineered to perform — not just today, but for the next 25 years.",
+      "Power that never quits. We design and deploy complete solar energy systems for residential, commercial, and industrial clients. Every installation is engineered to perform, not just today, but for the next 25 years.",
     image: "/images/services/cei.jpg",
   },
   {
@@ -40,7 +40,7 @@ export const SERVICES = [
     name: "Industrial Energy Solutions",
     blurb: "High-capacity power infrastructure for factories and large facilities.",
     description:
-      "Because downtime costs more than energy. For factories, warehouses, and large facilities — we deliver high-capacity power infrastructure that eliminates operational disruption.",
+      "Because downtime costs more than energy. For factories, warehouses, and large facilities. We deliver high-capacity power infrastructure that eliminates operational disruption.",
     image: "/images/services/ies.jpg",
   },
   {
@@ -105,7 +105,7 @@ export const TESTIMONIALS = [
     rating: 5,
   },
   {
-    quote: "They didn't just sell us solar. They helped us understand our energy needs and built exactly what we required. The monitoring dashboard is incredible — world-class service.",
+    quote: "They didn't just sell us solar. They helped us understand our energy needs and built exactly what we required. The monitoring dashboard is incredible, world-class service.",
     name: "Chukwudi M.",
     role: "School Director",
     location: "Enugu",

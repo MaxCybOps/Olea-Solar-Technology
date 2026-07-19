@@ -7,7 +7,7 @@ import { Suspense } from "react";
 
 function SuccessContent() {
   const params = useSearchParams();
-  const orderNumber = params.get("order") ?? "—";
+  const orderNumber = params.get("order") ?? "N/A";
 
   return (
     <div style={{ minHeight: "90vh", display: "flex", alignItems: "center", justifyContent: "center", paddingTop: 100, paddingBottom: 80, background: "var(--bg-page)" }}>

@@ -121,9 +121,9 @@ button { font-family: var(--font-sans); }
 .t-display {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: clamp(48px, 7vw, 96px);
-  line-height: 1.0;
-  letter-spacing: -0.03em;
+  font-size: clamp(32px, 4.2vw, 56px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 .headline-section {
@@ -241,7 +241,7 @@ button { font-family: var(--font-sans); }
 .hp-hero__glow--green { bottom: -18%; left: -12%; width: 560px; height: 560px; background: radial-gradient(circle, rgba(26,122,74,0.26) 0%, transparent 65%); }
 .hp-hero__content { position: relative; z-index: 3; width: 100%; }
 .hp-hero__inner { max-width: 960px; }
-.hp-hero__headline { font-family: var(--font-display); font-weight: 700; font-size: clamp(38px, 5.8vw, 86px); line-height: 0.97; letter-spacing: -0.025em; color: #fff; margin: 0 0 20px; text-wrap: balance; }
+.hp-hero__headline { font-family: var(--font-display); font-weight: 700; font-size: clamp(34px, 4.6vw, 62px); line-height: 1.08; letter-spacing: -0.02em; color: #fff; margin: 0 0 22px; text-wrap: balance; }
 .hp-hero__gold { color: var(--accent); }
 .hp-hero__sub  { font-size: 18px; line-height: 1.68; color: rgba(255,255,255,0.74); max-width: 660px; margin: 0 0 34px; }
 .hp-hero__ctas { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -311,7 +311,7 @@ button { font-family: var(--font-sans); }
 }
 .hp-why__glow { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 700px; height: 700px; background: radial-gradient(circle, rgba(249,166,6,0.07) 0%, transparent 60%); pointer-events: none; }
 .hp-why__head { text-align: center; max-width: 860px; margin: 0 auto; position: relative; }
-.hp-why__headline { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 3.8vw, 56px); line-height: 1.06; letter-spacing: -0.02em; margin: 0 0 16px; color: #fff; }
+.hp-why__headline { font-family: var(--font-display); font-weight: 700; font-size: clamp(24px, 3vw, 42px); line-height: 1.14; letter-spacing: -0.015em; margin: 0 0 18px; color: #fff; }
 .hp-why__gold { color: var(--accent); }
 .hp-why__sub  { font-size: 16px; line-height: 1.55; color: rgba(255,255,255,0.64); margin: 0; }
 .hp-why__grid { margin-top: 56px; display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; align-items: stretch; }
@@ -361,7 +361,7 @@ button { font-family: var(--font-sans); }
 .hp-cta__inner { display: flex; align-items: center; gap: 36px; flex-wrap: wrap; position: relative; }
 .hp-cta__text { flex: 1; min-width: 240px; }
 .hp-cta__eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--olea-green-900); opacity: 0.60; margin-bottom: 10px; }
-.hp-cta__headline { font-family: var(--font-display); font-weight: 700; font-size: clamp(24px, 3.6vw, 48px); line-height: 1.06; letter-spacing: -0.02em; margin: 0 0 10px; color: var(--olea-green-900); text-wrap: balance; }
+.hp-cta__headline { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 2.8vw, 38px); line-height: 1.14; letter-spacing: -0.015em; margin: 0 0 12px; color: var(--olea-green-900); text-wrap: balance; }
 .hp-cta__sub { font-size: 15px; color: var(--olea-green-900); opacity: 0.70; margin: 0; max-width: 500px; }
 .hp-cta__btn { flex-shrink: 0; font-size: 14px; padding: 14px 26px; }
 

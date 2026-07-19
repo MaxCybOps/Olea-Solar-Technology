@@ -93,7 +93,7 @@ export default function ContactPage() {
         <div className="container">
           <div className="contact-grid">
 
-            {/* LEFT — Info */}
+            {/* LEFT, Info */}
             <div>
               <span className="eyebrow">Reach Us</span>
               <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(22px, 2.4vw, 32px)", color: "var(--olea-ink)", margin: "0 0 36px", lineHeight: 1.15 }}>
@@ -136,7 +136,7 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* RIGHT — Form */}
+            {/* RIGHT, Form */}
             <div className="card" style={{ padding: "36px 32px" }}>
               <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 22, color: "var(--olea-ink)", margin: "0 0 5px" }}>
                 Request a free assessment

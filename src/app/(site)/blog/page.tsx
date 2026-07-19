@@ -54,7 +54,7 @@ export default function BlogPage() {
             <span style={{ color: "var(--accent)" }}>explained.</span>
           </h1>
           <p style={{ fontSize: 18, color: "rgba(255,255,255,0.70)", maxWidth: 660, lineHeight: 1.7, margin: 0 }}>
-            Practical guides, real installation stories, and the science of powering Africa — written by the engineers who do the work.
+            Practical guides, real installation stories, and the science of powering Africa, written by the engineers who do the work.
           </p>
         </div>
       </section>

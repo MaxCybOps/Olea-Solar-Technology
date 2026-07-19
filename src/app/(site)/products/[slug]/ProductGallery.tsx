@@ -71,7 +71,7 @@ export default function ProductGallery({ category, productName, discount, isFeat
           >
             <Image
               src={src}
-              alt={`${productName} — view ${i + 1}`}
+              alt={`${productName}, view ${i + 1}`}
               fill
               style={{ objectFit: "cover", opacity: i === active ? 1 : 0.6, transition: "opacity 180ms" }}
             />

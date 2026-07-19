@@ -161,7 +161,7 @@ export default function ProductsPageClient({ products }: { products: Product[] }
             <span>Shop</span>
           </nav>
           <span className="eyebrow">Shop</span>
-          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(48px, 7vw, 96px)", lineHeight: 1.0, letterSpacing: "-0.03em", margin: "0 0 14px", color: "#fff" }}>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(32px, 4.2vw, 56px)", lineHeight: 1.12, letterSpacing: "-0.02em", margin: "0 0 16px", color: "#fff" }}>
             Equipment built for<br />
             <span style={{ color: "var(--accent)" }}>African conditions.</span>
           </h1>
@@ -176,7 +176,7 @@ export default function ProductsPageClient({ products }: { products: Product[] }
         <div className="container">
           <div className="products-layout" style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 40, alignItems: "start" }}>
 
-            {/* Sidebar — desktop */}
+            {/* Sidebar, desktop */}
             <aside className="products-sidebar" style={{ position: "sticky", top: 100, alignSelf: "flex-start" }}>
               <Sidebar />
             </aside>

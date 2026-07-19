@@ -7,7 +7,7 @@ import Image from "next/image";
 const FAQS = [
   {
     q: "How much does a solar system cost?",
-    a: "It depends entirely on your energy needs. A complete home system typically starts around ₦1.4M fully installed, while industrial systems scale from there. The honest answer comes after a free assessment — we size to your real load, never a guess, and model your exact payback before you commit.",
+    a: "It depends entirely on your energy needs. A complete home system typically starts around ₦1.4M fully installed, while industrial systems scale from there. The honest answer comes after a free assessment. We size to your real load, never a guess, and model your exact payback before you commit.",
   },
   {
     q: "How long does installation take?",
@@ -19,7 +19,7 @@ const FAQS = [
   },
   {
     q: "Do you offer financing or payment plans?",
-    a: "Yes. We offer structured payment plans for qualifying residential and commercial projects. Speak to our team about your project size — we'll find a payment structure that works for your budget.",
+    a: "Yes. We offer structured payment plans for qualifying residential and commercial projects. Speak to our team about your project size. We'll find a payment structure that works for your budget.",
   },
   {
     q: "What warranty do I get?",
@@ -27,15 +27,15 @@ const FAQS = [
   },
   {
     q: "Do you maintain the system after installation?",
-    a: "Yes. We offer scheduled maintenance packages and emergency call-outs. Our smart monitoring platform also lets us detect issues remotely before they affect your power — often before you even notice.",
+    a: "Yes. We offer scheduled maintenance packages and emergency call-outs. Our smart monitoring platform also lets us detect issues remotely before they affect your power, often before you even notice.",
   },
   {
     q: "Can solar really run air conditioners and heavy appliances?",
-    a: "Absolutely. We size systems to handle your actual load — including ACs, freezers, pumps, and industrial equipment. The key is proper sizing. We do a full energy audit before designing your system.",
+    a: "Absolutely. We size systems to handle your actual load, including ACs, freezers, pumps, and industrial equipment. The key is proper sizing. We do a full energy audit before designing your system.",
   },
   {
     q: "Where do you operate?",
-    a: "We currently serve Owerri, Lagos, Abuja, Port Harcourt, Enugu, and Kano, with installations across 6 states. We're expanding rapidly — contact us and we'll confirm availability in your area.",
+    a: "We currently serve Owerri, Lagos, Abuja, Port Harcourt, Enugu, and Kano, with installations across 6 states. We're expanding rapidly. Contact us and we'll confirm availability in your area.",
   },
 ];
 
@@ -162,7 +162,7 @@ export default function FAQsPage() {
               Still have a question?
             </h3>
             <p style={{ color: "rgba(255,255,255,0.62)", margin: "0 0 28px", fontSize: 15, lineHeight: 1.6 }}>
-              Our team is one message away — and we actually reply.
+              Our team is one message away, and we actually reply.
             </p>
             <Link
               href="/contact"

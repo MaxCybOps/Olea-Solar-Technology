@@ -23,7 +23,7 @@ const SERVICES_FULL: {
     Icon: Zap,
     eyebrow: "Clean Energy Infrastructure",
     headline: "Power that never quits, engineered from the ground up.",
-    body: "We design and deploy complete solar energy systems for residential, commercial, and industrial clients. Every installation is engineered to perform — not just today, but for the next 25 years.",
+    body: "We design and deploy complete solar energy systems for residential, commercial, and industrial clients. Every installation is engineered to perform, not just today, but for the next 25 years.",
     bullets: [
       "Complete solar design & installation",
       "Residential, commercial & industrial",
@@ -51,7 +51,7 @@ const SERVICES_FULL: {
     Icon: HardHat,
     eyebrow: "Industrial Energy Solutions",
     headline: "High-capacity power for those who can't afford downtime.",
-    body: "For factories, warehouses, and large facilities — we deliver high-capacity power infrastructure that eliminates operational disruption and slashes fuel costs.",
+    body: "For factories, warehouses, and large facilities. We deliver high-capacity power infrastructure that eliminates operational disruption and slashes fuel costs.",
     bullets: [
       "Three-phase hybrid systems",
       "Factory & warehouse solutions",
@@ -65,7 +65,7 @@ const SERVICES_FULL: {
     Icon: ClipboardCheck,
     eyebrow: "Energy Consulting",
     headline: "We measure twice. Then we build.",
-    body: "Our expert consultants assess your energy profile, identify inefficiencies, and design a solution that fits your goals and your budget — before you commit a single naira.",
+    body: "Our expert consultants assess your energy profile, identify inefficiencies, and design a solution that fits your goals and your budget, before you commit a single naira.",
     bullets: [
       "Full energy audits & load profiling",
       "System sizing & specification",
@@ -79,7 +79,7 @@ const SERVICES_FULL: {
     Icon: Wrench,
     eyebrow: "Maintenance & Support",
     headline: "We don't disappear after installation.",
-    body: "Your system is monitored, serviced, and supported long after handover. Our technical team is always one call away — and our monitoring platform catches issues before you do.",
+    body: "Your system is monitored, serviced, and supported long after handover. Our technical team is always one call away, and our monitoring platform catches issues before you do.",
     bullets: [
       "Scheduled preventive maintenance",
       "Emergency callout service",
@@ -144,7 +144,7 @@ export default function ServicesPage() {
           <section key={svc.id} id={svc.id} className={`section ${i % 2 === 0 ? "section-white" : "section-bg"}`}>
             <div className="container">
               <div className={`svc-row${imgLeft ? " svc-row--img-left" : ""}`}>
-                {/* Text — always first in DOM; CSS handles visual swap */}
+                {/* Text, always first in DOM; CSS handles visual swap */}
                 <ScrollFade from={imgLeft ? "right" : "left"} className="svc-text-cell">
                   <div>
                     <div style={{
@@ -212,7 +212,7 @@ export default function ServicesPage() {
                   Not sure which<br />solution fits?
                 </h2>
                 <p style={{ fontSize: 15, color: "var(--olea-green-900)", opacity: 0.70, margin: 0 }}>
-                  Book a free consultation — we&apos;ll assess your needs and design the right solution for your home, business, or facility.
+                  Book a free consultation. We&apos;ll assess your needs and design the right solution for your home, business, or facility.
                 </p>
               </div>
             </ScrollFade>

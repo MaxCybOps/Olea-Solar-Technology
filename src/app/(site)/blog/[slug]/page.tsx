@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const post = getBlogPostBySlug(slug);
   if (!post) return { title: "Not Found" };
   return {
-    title: `${post.title} — Olea Journal`,
+    title: `${post.title} | Olea Journal`,
     description: post.excerpt,
   };
 }
@@ -66,7 +66,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
           <span style={{ display: "inline-block", background: "var(--accent)", color: "var(--olea-ink)", padding: "4px 14px", borderRadius: 4, fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 18 }}>
             {post.category}
           </span>
-          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(48px, 7vw, 96px)", lineHeight: 1.0, letterSpacing: "-0.03em", margin: "0 0 20px", color: "#fff" }}>
+          <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(30px, 3.8vw, 50px)", lineHeight: 1.14, letterSpacing: "-0.02em", margin: "0 0 20px", color: "#fff" }}>
             {post.title}
           </h1>
           <p style={{ fontSize: 18, color: "rgba(255,255,255,0.72)", lineHeight: 1.7, margin: "0 0 28px", maxWidth: 720 }}>
@@ -118,7 +118,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
             <div style={{ marginTop: 52, padding: 28, background: "var(--olea-green-50)", borderRadius: 14, display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
               <div style={{ flex: 1, minWidth: 240 }}>
                 <div style={{ fontWeight: 700, fontSize: 19, marginBottom: 6, color: "var(--olea-ink)" }}>Want this sized for your home?</div>
-                <div style={{ fontSize: 14.5, color: "var(--fg-2)" }}>Get a free assessment — we'll model your exact system and payback period.</div>
+                <div style={{ fontSize: 14.5, color: "var(--fg-2)" }}>Get a free assessment. We'll model your exact system and payback period.</div>
               </div>
               <Link href="/contact" className="btn btn-primary" style={{ flexShrink: 0 }}>
                 Get a Free Assessment →

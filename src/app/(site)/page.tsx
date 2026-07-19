@@ -16,7 +16,7 @@ const SERVICE_ICONS: Record<string, LucideIcon> = {
 };
 
 export const metadata: Metadata = {
-  title: "Olea Technologies — Powering Sustainable Future",
+  title: "Olea Technologies | Powering Sustainable Future",
   description: "Africa's premium clean-energy company. Solar systems, smart infrastructure, and real support.",
 };
 
@@ -65,7 +65,7 @@ export default function HomePage() {
             </h1>
             <p className="hp-hero__sub">
               Olea Technologies builds clean energy infrastructure that drives homes, businesses,
-              and industries into the future — intelligently, sustainably, and at scale.
+              and industries into the future, intelligently, sustainably, and at scale.
             </p>
             <div className="hp-hero__ctas">
               <Link href="/products" className="btn btn-primary">Explore Our Solutions →</Link>
@@ -134,7 +134,7 @@ export default function HomePage() {
                   We don't just sell solar.<br />We engineer energy ecosystems.
                 </h2>
                 <p className="lead" style={{ marginBottom: 28 }}>
-                  From a single home to an entire industrial complex — every solution we deploy is intelligent,
+                  From a single home to an entire industrial complex, every solution we deploy is intelligent,
                   scalable, and engineered to perform for decades.
                 </p>
                 <div className="hp-wwd__pillars">
