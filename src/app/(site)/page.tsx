@@ -95,7 +95,7 @@ export default function HomePage() {
             "500+ Installations", "25-Year Warranty", "2-Hour Response",
           ].map((item, i) => (
             <span key={i} className="marquee-item">
-              {item}<span className="marquee-sep"> ✦ </span>
+              {item}<span className="marquee-sep">✦</span>
             </span>
           ))}
         </div>
