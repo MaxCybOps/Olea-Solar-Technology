@@ -6,8 +6,10 @@ export async function POST(req: NextRequest) {
   const body      = await req.text();
   const signature = req.headers.get("x-paystack-signature") ?? "";
 
+  // Paystack has no separate webhook-signing secret — signatures are verified
+  // with the same secret key used for API calls (unlike Stripe's model).
   const hash = crypto
-    .createHmac("sha512", process.env.PAYSTACK_WEBHOOK_SECRET ?? "")
+    .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY ?? "")
     .update(body)
     .digest("hex");
 
