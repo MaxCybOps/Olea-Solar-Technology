@@ -3,28 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Clock, ChevronRight, Share2 } from "lucide-react";
 import Image from "next/image";
+import { getBlogPostBySlug, getRelatedPosts, getStaticPostsWithImages, POST_IMAGES } from "@/lib/blog-data";
+import { fetchPostBySlug, fetchAllPublishedPosts } from "@/lib/supabase/blog";
 
-const POST_IMAGES: Record<string, string> = {
-  b1:  "/images/blog/solar-sizing.jpg",
-  b2:  "/images/blog/factory-install.jpg",
-  b3:  "/images/blog/battery-guide.jpg",
-  b4:  "/images/gallery-3.jpg",
-  b5:  "/images/gallery-5.jpg",
-  b6:  "/images/gallery-1.jpg",
-  b7:  "/images/about/team-work.jpg",
-  b8:  "/images/about/team-smiling.jpg",
-  b9:  "/images/gallery-2.jpg",
-  b10: "/images/gallery-7.jpg",
-};
-import { BLOG_POSTS, getBlogPostBySlug, getRelatedPosts } from "@/lib/blog-data";
-
-export async function generateStaticParams() {
-  return BLOG_POSTS.map((p) => ({ slug: p.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const post = (await fetchPostBySlug(slug)) ?? getBlogPostBySlug(slug);
   if (!post) return { title: "Not Found" };
   return {
     title: `${post.title} | Olea Journal`,
@@ -34,10 +20,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
+  const dbPost = await fetchPostBySlug(slug);
+  const post = dbPost ?? getBlogPostBySlug(slug);
   if (!post) notFound();
 
-  const related = getRelatedPosts(post.id, 3);
+  const heroImage: string = dbPost?.image ?? POST_IMAGES[post.id] ?? "/images/blog-hero.jpg";
+
+  const dbPosts = await fetchAllPublishedPosts();
+  const pool = dbPosts.length > 0 ? dbPosts : getStaticPostsWithImages();
+  const related = dbPost
+    ? pool.filter((p) => p.id !== post.id && p.category === post.category).slice(0, 3)
+    : getRelatedPosts(post.id, 3).map((p) => ({ ...p, image: POST_IMAGES[p.id] ?? "/images/blog-hero.jpg" }));
 
   return (
     <>
@@ -45,7 +38,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
       <section style={{ position: "relative", background: "var(--olea-green-900)", color: "#fff", paddingTop: 148, paddingBottom: 64, overflow: "hidden", minHeight: 440 }}>
         <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
           <Image
-            src={POST_IMAGES[post.id] ?? "/images/blog-hero.jpg"}
+            src={heroImage}
             alt=""
             fill
             style={{ objectFit: "cover", objectPosition: "center" }}
@@ -158,7 +151,7 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
                 >
                   <div style={{ aspectRatio: "16/10", position: "relative", overflow: "hidden" }}>
                     <Image
-                      src={POST_IMAGES[p.id] ?? "/images/blog-hero.jpg"}
+                      src={("image" in p && p.image) || "/images/blog-hero.jpg"}
                       alt={p.title}
                       fill
                       style={{ objectFit: "cover", transition: "transform 500ms" }}

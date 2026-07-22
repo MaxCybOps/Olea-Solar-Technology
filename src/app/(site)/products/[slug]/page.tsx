@@ -4,10 +4,12 @@ import { notFound } from "next/navigation";
 import { Truck, ShieldCheck, Wrench, ChevronRight, Zap, Sun, BatteryCharging, Home, SlidersVertical, type LucideIcon } from "lucide-react";
 import { SEED_PRODUCTS, getProductBySlug } from "@/lib/products-data";
 import { fetchProductBySlug, fetchAllActiveProducts } from "@/lib/supabase/products";
+import { fetchApprovedReviews } from "@/lib/supabase/reviews";
 import { formatPrice } from "@/lib/utils";
 import ProductCard from "@/components/site/ProductCard";
 import AddToCartButton from "./AddToCartButton";
 import ProductGallery from "./ProductGallery";
+import ReviewsSection from "./ReviewsSection";
 import type { ProductCategory } from "@/types";
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
@@ -52,6 +54,8 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const related = pool.filter(
     (p) => p.id !== product.id && (p.category === product.category || p.isFeatured)
   ).slice(0, 4);
+
+  const reviews = await fetchApprovedReviews(product.id);
 
   const isOutOfStock = product.stockQuantity === 0;
   const isLowStock   = !isOutOfStock && product.stockQuantity <= product.lowStockThreshold;
@@ -224,6 +228,9 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
           </div>
         </section>
       )}
+
+      {/* ── Reviews ── */}
+      <ReviewsSection productId={product.id} reviews={reviews} />
 
       {/* ── Related products ── */}
       {related.length > 0 && (

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { generateOrderRef } from "@/lib/utils";
+import { sendOrderConfirmation, sendAdminOrderAlert } from "@/lib/email";
 
 const orderSchema = z.object({
   customerName: z.string().min(2).max(255),
@@ -65,6 +66,22 @@ export async function POST(req: NextRequest) {
     );
 
     if (itemsErr) throw itemsErr;
+
+    await Promise.all([
+      sendOrderConfirmation({
+        to: data.customerEmail,
+        customerName: data.customerName,
+        orderNumber: order.order_number,
+        total: order.total,
+        items: data.items.map((i) => ({ productName: i.productName, quantity: i.quantity, unitPrice: i.productPrice })),
+      }),
+      sendAdminOrderAlert({
+        orderNumber: order.order_number,
+        customerName: data.customerName,
+        customerEmail: data.customerEmail,
+        total: order.total,
+      }),
+    ]);
 
     return NextResponse.json(
       { success: true, orderId: order.id, orderNumber: order.order_number, total: order.total },

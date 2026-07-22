@@ -97,6 +97,8 @@ export interface BlogPostRow {
   category: string | null;
   author: string | null;
   image_url: string | null;
+  read_time: string | null;
+  is_featured: boolean;
   is_published: boolean;
   created_at: string;
   updated_at: string;

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { sendAdminLeadAlert } from "@/lib/email";
 
 const inquirySchema = z.object({
   name:     z.string().min(2).max(255),
@@ -31,6 +32,8 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (error) throw error;
+
+    await sendAdminLeadAlert({ name: data.name, email: data.email, phone: data.phone, message: data.message });
 
     return NextResponse.json({ success: true, id: lead.id }, { status: 201 });
   } catch (err) {

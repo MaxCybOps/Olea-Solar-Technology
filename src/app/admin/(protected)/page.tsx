@@ -1,52 +1,41 @@
 import type { Metadata } from "next";
-import { ShoppingBag, Users, TrendingUp, Zap, ArrowUpRight, ArrowDownRight, Package, AlertCircle } from "lucide-react";
+import { ShoppingBag, Users, TrendingUp, Zap, ArrowUpRight, ArrowDownRight, Package, AlertCircle, Star, Mail } from "lucide-react";
 import { fetchLowStockProducts } from "@/lib/supabase/products";
 import { SEED_PRODUCTS } from "@/lib/products-data";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import type { OrderRow, LeadRow, ReviewRow } from "@/types/database";
 
 export const metadata: Metadata = { title: "Dashboard" };
 export const dynamic = "force-dynamic";
 
-const KPIS = [
-  { label: "Total Revenue", value: "₦47.2M", change: "+18.4%", up: true, icon: TrendingUp, color: "var(--olea-green-600)", bg: "rgba(26,122,74,0.10)" },
-  { label: "Orders (MTD)",  value: "142",    change: "+23.1%", up: true, icon: ShoppingBag, color: "#c88a00", bg: "rgba(249,166,6,0.12)" },
-  { label: "New Leads",     value: "38",     change: "+8",     up: true, icon: Users,       color: "var(--olea-green-600)", bg: "rgba(26,122,74,0.10)" },
-  { label: "Avg Order",     value: "₦332k",  change: "-4.2%",  up: false, icon: Zap,         color: "#e53e3e", bg: "rgba(229,62,62,0.08)" },
-];
-
-const RECENT_ORDERS = [
-  { id: "OT-20260601-A1B2", customer: "Emmanuel Okafor",  email: "e.okafor@email.com",  items: 3, total: 1850000, status: "PAID" },
-  { id: "OT-20260601-C3D4", customer: "Ngozi Adeyemi",    email: "ngozi@company.ng",    items: 1, total: 280000,  status: "PROCESSING" },
-  { id: "OT-20260531-E5F6", customer: "Chukwudi Mensah",  email: "c.mensah@firm.ng",   items: 2, total: 698000,  status: "PAID" },
-  { id: "OT-20260531-G7H8", customer: "Adaeze Nwosu",     email: "ada@homes.ng",        items: 1, total: 95000,   status: "PENDING" },
-  { id: "OT-20260530-I9J0", customer: "Babatunde Lawal",  email: "b.lawal@corp.ng",     items: 4, total: 2430000, status: "SHIPPED" },
-];
-
-const ACTIVITY = [
-  { icon: ShoppingBag, tone: "success",  what: "New order OT-20260601-A1B2 placed",  who: "Emmanuel Okafor",  when: "2 min ago" },
-  { icon: Zap,         tone: "default",  what: "Payment verified via Paystack",       who: "System",           when: "3 min ago" },
-  { icon: Users,       tone: "warning",  what: "New inquiry from Ngozi Adeyemi",      who: "Lagos",            when: "14 min ago" },
-  { icon: Package,     tone: "warning",  what: "200Ah Lithium Battery low stock (8)", who: "Inventory",        when: "1hr ago" },
-  { icon: ShoppingBag, tone: "success",  what: "Order OT-20260531-E5F6 shipped",      who: "Ops team",         when: "3hr ago" },
-];
-
 const STATUS_STYLES: Record<string, { bg: string; color: string }> = {
-  PAID:       { bg: "rgba(56,161,105,0.12)",  color: "#1d6b3f" },
-  PROCESSING: { bg: "rgba(249,166,6,0.15)",   color: "#8a5e00" },
-  PENDING:    { bg: "rgba(229,62,62,0.10)",   color: "#b53030" },
-  SHIPPED:    { bg: "rgba(26,122,74,0.12)",   color: "var(--olea-green-700)" },
-  DELIVERED:  { bg: "rgba(56,161,105,0.12)",  color: "#1d6b3f" },
-  CANCELLED:  { bg: "rgba(229,62,62,0.08)",   color: "#b53030" },
+  pending:     { bg: "rgba(229,62,62,0.10)",  color: "#b53030" },
+  confirmed:   { bg: "rgba(249,166,6,0.15)",  color: "#8a5e00" },
+  processing:  { bg: "rgba(249,166,6,0.15)",  color: "#8a5e00" },
+  shipped:     { bg: "rgba(26,122,74,0.12)",  color: "var(--olea-green-700)" },
+  delivered:   { bg: "rgba(56,161,105,0.12)", color: "#1d6b3f" },
+  cancelled:   { bg: "rgba(229,62,62,0.08)",  color: "#b53030" },
 };
 
 function fmtNaira(n: number) {
   return "₦" + n.toLocaleString("en-NG");
 }
 
-// Simple SVG sparkline chart
+function timeAgo(iso: string): string {
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins} min ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}hr ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+}
+
 function Sparkline({ data, color }: { data: number[]; color: string }) {
   const w = 800, h = 200, pad = 20;
-  const max = Math.max(...data) * 1.1;
-  const xs = data.map((_, i) => pad + (i / (data.length - 1)) * (w - pad * 2));
+  const max = Math.max(...data, 1) * 1.1;
+  const xs = data.map((_, i) => pad + (i / Math.max(data.length - 1, 1)) * (w - pad * 2));
   const ys = data.map((v) => h - pad - (v / max) * (h - pad * 2));
   const line = xs.map((x, i) => `${i === 0 ? "M" : "L"}${x.toFixed(1)},${ys[i].toFixed(1)}`).join(" ");
   const area = `${line} L${xs[xs.length - 1]},${h - pad} L${xs[0]},${h - pad} Z`;
@@ -67,16 +56,100 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
   );
 }
 
-const REVENUE_DATA = [1.2, 2.1, 1.8, 3.4, 2.9, 4.1, 3.6, 5.2, 4.8, 6.1, 5.4, 7.2, 6.8, 5.9, 7.8, 6.4, 8.1, 7.6, 9.2, 8.7, 7.9, 9.8, 8.4, 10.2, 9.6, 11.1, 10.4, 9.8, 11.6, 12.3];
+interface ActivityItem {
+  icon: typeof ShoppingBag;
+  tone: "success" | "warning" | "default";
+  what: string;
+  who: string;
+  when: string;
+  at: number;
+}
+
+async function fetchDashboardData() {
+  try {
+    const [ordersRes, leadsRes, reviewsRes] = await Promise.all([
+      supabaseAdmin.from("orders").select("*").order("created_at", { ascending: false }).limit(50),
+      supabaseAdmin.from("leads").select("*").order("created_at", { ascending: false }).limit(20),
+      supabaseAdmin.from("reviews").select("*").order("created_at", { ascending: false }).limit(10),
+    ]);
+
+    const orders = (ordersRes.data ?? []) as unknown as OrderRow[];
+    const leads = (leadsRes.data ?? []) as unknown as LeadRow[];
+    const reviews = (reviewsRes.data ?? []) as unknown as ReviewRow[];
+
+    return { orders, leads, reviews };
+  } catch {
+    return { orders: [] as OrderRow[], leads: [] as LeadRow[], reviews: [] as ReviewRow[] };
+  }
+}
 
 export default async function AdminDashboard() {
-  const dbLowStock = await fetchLowStockProducts();
+  const [{ orders, leads, reviews }, dbLowStock] = await Promise.all([
+    fetchDashboardData(),
+    fetchLowStockProducts(),
+  ]);
+
   const lowStock = dbLowStock.length > 0
     ? dbLowStock
     : SEED_PRODUCTS.filter((p) => p.stockQuantity <= p.lowStockThreshold).map((p) => ({
         id: p.id, name: p.name, slug: p.slug, category: p.category,
         stock_quantity: p.stockQuantity, low_stock_threshold: p.lowStockThreshold,
       }));
+
+  // ── KPIs, computed from real orders/leads ──
+  const now = new Date();
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+
+  const paidOrders = orders.filter((o) => o.payment_status === "paid");
+  const ordersThisMonth = orders.filter((o) => new Date(o.created_at) >= startOfMonth);
+  const ordersLastMonth = orders.filter((o) => new Date(o.created_at) >= startOfLastMonth && new Date(o.created_at) < startOfMonth);
+  const revenueThisMonth = paidOrders.filter((o) => new Date(o.created_at) >= startOfMonth).reduce((s, o) => s + o.total, 0);
+  const revenueLastMonth = paidOrders.filter((o) => new Date(o.created_at) >= startOfLastMonth && new Date(o.created_at) < startOfMonth).reduce((s, o) => s + o.total, 0);
+  const revenueChange = revenueLastMonth > 0 ? ((revenueThisMonth - revenueLastMonth) / revenueLastMonth) * 100 : (revenueThisMonth > 0 ? 100 : 0);
+  const orderChange = ordersLastMonth.length > 0 ? ((ordersThisMonth.length - ordersLastMonth.length) / ordersLastMonth.length) * 100 : (ordersThisMonth.length > 0 ? 100 : 0);
+  const leadsThisMonth = leads.filter((l) => new Date(l.created_at) >= startOfMonth);
+  const avgOrder = paidOrders.length > 0 ? paidOrders.reduce((s, o) => s + o.total, 0) / paidOrders.length : 0;
+
+  const KPIS = [
+    { label: "Total Revenue", value: fmtNaira(revenueThisMonth), change: `${revenueChange >= 0 ? "+" : ""}${revenueChange.toFixed(1)}%`, up: revenueChange >= 0, icon: TrendingUp, color: "var(--olea-green-600)", bg: "rgba(26,122,74,0.10)" },
+    { label: "Orders (MTD)",  value: String(ordersThisMonth.length), change: `${orderChange >= 0 ? "+" : ""}${orderChange.toFixed(1)}%`, up: orderChange >= 0, icon: ShoppingBag, color: "#c88a00", bg: "rgba(249,166,6,0.12)" },
+    { label: "New Leads",     value: String(leadsThisMonth.length), change: `${leadsThisMonth.length}`, up: true, icon: Users, color: "var(--olea-green-600)", bg: "rgba(26,122,74,0.10)" },
+    { label: "Avg Order",     value: fmtNaira(Math.round(avgOrder)), change: `${paidOrders.length} paid`, up: true, icon: Zap, color: "#e53e3e", bg: "rgba(229,62,62,0.08)" },
+  ];
+
+  // ── Revenue chart: last 30 days, real orders ──
+  const REVENUE_DATA = Array.from({ length: 30 }, (_, i) => {
+    const day = new Date(now);
+    day.setDate(now.getDate() - (29 - i));
+    const dayTotal = paidOrders
+      .filter((o) => new Date(o.created_at).toDateString() === day.toDateString())
+      .reduce((s, o) => s + o.total, 0);
+    return dayTotal / 1_000_000; // in millions for chart scale
+  });
+  const hasRevenueData = REVENUE_DATA.some((v) => v > 0);
+
+  // ── Recent orders: real, latest 5 ──
+  const recentOrders = orders.slice(0, 5);
+
+  // ── Activity feed: merged real orders + leads + reviews, sorted by time ──
+  const activity: ActivityItem[] = [
+    ...orders.slice(0, 5).map((o) => ({
+      icon: ShoppingBag, tone: "success" as const,
+      what: `New order ${o.order_number} placed`, who: o.customer_name,
+      when: timeAgo(o.created_at), at: new Date(o.created_at).getTime(),
+    })),
+    ...leads.slice(0, 5).map((l) => ({
+      icon: Mail, tone: "warning" as const,
+      what: `New inquiry from ${l.name}`, who: l.email,
+      when: timeAgo(l.created_at), at: new Date(l.created_at).getTime(),
+    })),
+    ...reviews.slice(0, 3).map((r) => ({
+      icon: Star, tone: "default" as const,
+      what: `New ${r.rating}★ review submitted`, who: r.customer_name,
+      when: timeAgo(r.created_at), at: new Date(r.created_at).getTime(),
+    })),
+  ].sort((a, b) => b.at - a.at).slice(0, 6);
 
   return (
     <div style={{ flex: 1, overflowY: "auto", padding: 24 }}>
@@ -117,10 +190,10 @@ export default async function AdminDashboard() {
 
           {/* Revenue chart */}
           <div style={{ background: "#fff", borderRadius: 12, boxShadow: "var(--shadow-sm)", overflow: "hidden" }}>
-            <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border-subtle)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div>
-                <div style={{ fontWeight: 600, fontSize: 14 }}>Revenue · last 30 days</div>
-                <div style={{ fontSize: 12, color: "var(--fg-2)" }}>₦M per day · MTD ₦47.2M <span style={{ color: "#1d6b3f" }}>(+18.4%)</span></div>
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border-subtle)" }}>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>Revenue · last 30 days</div>
+              <div style={{ fontSize: 12, color: "var(--fg-2)" }}>
+                {hasRevenueData ? `MTD ${fmtNaira(revenueThisMonth)}` : "No paid orders yet"}
               </div>
             </div>
             <div style={{ padding: "12px 20px 16px" }}>
@@ -130,42 +203,45 @@ export default async function AdminDashboard() {
 
           {/* Recent orders */}
           <div style={{ background: "#fff", borderRadius: 12, boxShadow: "var(--shadow-sm)", overflow: "hidden" }}>
-            <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border-subtle)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div>
-                <div style={{ fontWeight: 600, fontSize: 14 }}>Recent Orders</div>
-                <div style={{ fontSize: 12, color: "var(--fg-2)" }}>Last 24 hours</div>
+            <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border-subtle)" }}>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>Recent Orders</div>
+              <div style={{ fontSize: 12, color: "var(--fg-2)" }}>Latest activity</div>
+            </div>
+            {recentOrders.length === 0 ? (
+              <div style={{ padding: "40px 20px", textAlign: "center", color: "var(--fg-2)", fontSize: 13 }}>
+                No orders yet. They'll appear here as customers check out.
               </div>
-            </div>
-            <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
-                <thead>
-                  <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
-                    {["Order #", "Customer", "Items", "Total", "Status"].map((h) => (
-                      <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--fg-2)", whiteSpace: "nowrap" }}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {RECENT_ORDERS.map((o, i) => {
-                    const s = STATUS_STYLES[o.status] ?? { bg: "#eee", color: "#666" };
-                    return (
-                      <tr key={o.id} style={{ borderBottom: i < RECENT_ORDERS.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
-                        <td style={{ padding: "12px 16px", fontWeight: 600, fontSize: 12, color: "var(--olea-green-700)", fontFamily: "monospace", whiteSpace: "nowrap" }}>{o.id}</td>
-                        <td style={{ padding: "12px 16px" }}>
-                          <div style={{ fontWeight: 500, fontSize: 13 }}>{o.customer}</div>
-                          <div style={{ fontSize: 11, color: "var(--fg-2)" }}>{o.email}</div>
-                        </td>
-                        <td style={{ padding: "12px 16px", textAlign: "center", color: "var(--fg-2)" }}>{o.items}</td>
-                        <td style={{ padding: "12px 16px", fontWeight: 700, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>{fmtNaira(o.total)}</td>
-                        <td style={{ padding: "12px 16px" }}>
-                          <span style={{ background: s.bg, color: s.color, fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: "3px 10px", borderRadius: 4, whiteSpace: "nowrap" }}>{o.status}</span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            ) : (
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ borderBottom: "1px solid var(--border-subtle)" }}>
+                      {["Order #", "Customer", "Total", "Status"].map((h) => (
+                        <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--fg-2)", whiteSpace: "nowrap" }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recentOrders.map((o, i) => {
+                      const s = STATUS_STYLES[o.status] ?? { bg: "#eee", color: "#666" };
+                      return (
+                        <tr key={o.id} style={{ borderBottom: i < recentOrders.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
+                          <td style={{ padding: "12px 16px", fontWeight: 600, fontSize: 12, color: "var(--olea-green-700)", fontFamily: "monospace", whiteSpace: "nowrap" }}>{o.order_number}</td>
+                          <td style={{ padding: "12px 16px" }}>
+                            <div style={{ fontWeight: 500, fontSize: 13 }}>{o.customer_name}</div>
+                            <div style={{ fontSize: 11, color: "var(--fg-2)" }}>{o.customer_email}</div>
+                          </td>
+                          <td style={{ padding: "12px 16px", fontWeight: 700, fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>{fmtNaira(o.total)}</td>
+                          <td style={{ padding: "12px 16px" }}>
+                            <span style={{ background: s.bg, color: s.color, fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", padding: "3px 10px", borderRadius: 4, whiteSpace: "nowrap" }}>{o.status}</span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         </div>
 
@@ -176,27 +252,33 @@ export default async function AdminDashboard() {
           <div style={{ background: "#fff", borderRadius: 12, boxShadow: "var(--shadow-sm)", overflow: "hidden" }}>
             <div style={{ padding: "14px 18px", borderBottom: "1px solid var(--border-subtle)" }}>
               <div style={{ fontWeight: 600, fontSize: 14 }}>Activity Feed</div>
-              <div style={{ fontSize: 12, color: "var(--fg-2)" }}>Live across orders, payments, leads</div>
+              <div style={{ fontSize: 12, color: "var(--fg-2)" }}>Live across orders, leads, reviews</div>
             </div>
-            {ACTIVITY.map((a, i) => {
-              const Icon = a.icon;
-              const iconStyle = a.tone === "success"
-                ? { bg: "rgba(56,161,105,0.10)", color: "#1d6b3f" }
-                : a.tone === "warning"
-                ? { bg: "rgba(249,166,6,0.18)", color: "#8a5e00" }
-                : { bg: "rgba(26,122,74,0.10)", color: "var(--olea-green-700)" };
-              return (
-                <div key={i} style={{ display: "flex", gap: 12, padding: "13px 18px", alignItems: "flex-start", borderBottom: i < ACTIVITY.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
-                  <div style={{ width: 30, height: 30, borderRadius: 8, flexShrink: 0, background: iconStyle.bg, color: iconStyle.color, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <Icon size={14} />
+            {activity.length === 0 ? (
+              <div style={{ padding: "40px 18px", textAlign: "center", color: "var(--fg-2)", fontSize: 13 }}>
+                Nothing yet. Activity shows up here as it happens.
+              </div>
+            ) : (
+              activity.map((a, i) => {
+                const Icon = a.icon;
+                const iconStyle = a.tone === "success"
+                  ? { bg: "rgba(56,161,105,0.10)", color: "#1d6b3f" }
+                  : a.tone === "warning"
+                  ? { bg: "rgba(249,166,6,0.18)", color: "#8a5e00" }
+                  : { bg: "rgba(26,122,74,0.10)", color: "var(--olea-green-700)" };
+                return (
+                  <div key={i} style={{ display: "flex", gap: 12, padding: "13px 18px", alignItems: "flex-start", borderBottom: i < activity.length - 1 ? "1px solid var(--border-subtle)" : "none" }}>
+                    <div style={{ width: 30, height: 30, borderRadius: 8, flexShrink: 0, background: iconStyle.bg, color: iconStyle.color, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <Icon size={14} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 12.5, color: "var(--olea-ink)", lineHeight: 1.4 }}>{a.what}</div>
+                      <div style={{ fontSize: 11, color: "var(--fg-2)", marginTop: 2 }}>{a.who} · {a.when}</div>
+                    </div>
                   </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 12.5, color: "var(--olea-ink)", lineHeight: 1.4 }}>{a.what}</div>
-                    <div style={{ fontSize: 11, color: "var(--fg-2)", marginTop: 2 }}>{a.who} · {a.when}</div>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
 
           {/* Low stock */}
