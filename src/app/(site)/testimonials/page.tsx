@@ -56,21 +56,21 @@ export default function TestimonialsPage() {
       </section>
 
       {/* Stats */}
-      <div style={{ background: "var(--olea-green-900)", color: "#fff", padding: "28px 0" }}>
+      <div style={{ background: "var(--olea-green-900)", color: "#fff", padding: "12px 0" }}>
         <div className="container">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12, textAlign: "center", maxWidth: 960, margin: "0 auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12, textAlign: "center", maxWidth: 860, margin: "0 auto" }}>
             {STATS.map((s, i) => {
               const Icon = LUCIDE_ICONS[s.icon];
               return (
-                <div key={s.label} style={{ padding: "0 10px", position: "relative" }}>
+                <div key={s.label} style={{ padding: "0 8px", position: "relative" }}>
                   {i > 0 && <span style={{ position: "absolute", left: 0, top: "15%", height: "70%", width: 1, background: "rgba(255,255,255,0.10)" }} />}
-                  <div style={{ color: "var(--accent)", marginBottom: 6, display: "flex", justifyContent: "center" }}>
-                    {Icon && <Icon size={22} />}
+                  <div style={{ color: "var(--accent)", marginBottom: 2, display: "flex", justifyContent: "center" }}>
+                    {Icon && <Icon size={15} />}
                   </div>
-                  <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(24px, 2.4vw, 34px)", lineHeight: 1 }}>
+                  <div style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: "clamp(15px, 1.5vw, 21px)", lineHeight: 1 }}>
                     <CountUp value={s.value} />
                   </div>
-                  <div style={{ fontSize: 11, opacity: 0.55, marginTop: 7, letterSpacing: "0.08em", textTransform: "uppercase" }}>{s.label}</div>
+                  <div style={{ fontSize: 8, opacity: 0.55, marginTop: 3, letterSpacing: "0.08em", textTransform: "uppercase" }}>{s.label}</div>
                 </div>
               );
             })}

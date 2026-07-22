@@ -261,13 +261,14 @@ button { font-family: var(--font-sans); }
 /* ══════════════════════════════════════════════════════════
    STATS STRIP
    ══════════════════════════════════════════════════════════ */
-.hp-stats { background: var(--olea-green-900); color: #fff; padding: 22px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.hp-stats { background: var(--olea-green-900); color: #fff; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .hp-stats__grid { display: grid; grid-template-columns: repeat(5,1fr); text-align: center; max-width: 860px; margin: 0 auto; }
 .hp-stats__item { padding: 0 8px; position: relative; }
 .hp-stats__divider { position: absolute; left: 0; top: 15%; height: 70%; width: 1px; background: rgba(255,255,255,0.09); }
-.hp-stats__icon  { color: var(--accent); margin-bottom: 4px; display: flex; justify-content: center; }
-.hp-stats__value { font-family: var(--font-display); font-weight: 700; font-size: clamp(19px, 2vw, 29px); line-height: 1; letter-spacing: -0.02em; }
-.hp-stats__label { font-size: 9px; opacity: 0.50; margin-top: 5px; letter-spacing: 0.08em; text-transform: uppercase; }
+.hp-stats__icon  { color: var(--accent); margin-bottom: 2px; display: flex; justify-content: center; }
+.hp-stats__icon svg { width: 15px; height: 15px; }
+.hp-stats__value { font-family: var(--font-display); font-weight: 700; font-size: clamp(15px, 1.5vw, 21px); line-height: 1; letter-spacing: -0.02em; }
+.hp-stats__label { font-size: 8px; opacity: 0.50; margin-top: 3px; letter-spacing: 0.08em; text-transform: uppercase; }
 
 
 /* ══════════════════════════════════════════════════════════
@@ -449,11 +450,11 @@ button { font-family: var(--font-sans); }
   .hp-stats { padding: 0; }
   /* Keep all 5 stats in one row — just scale down */
   .hp-stats__grid { grid-template-columns: repeat(5, 1fr); gap: 0; max-width: 100%; margin: 0; }
-  .hp-stats__item { padding: 12px 2px; display: flex; flex-direction: column; align-items: center; }
+  .hp-stats__item { padding: 8px 2px; display: flex; flex-direction: column; align-items: center; }
   .hp-stats__item:nth-child(4),
   .hp-stats__item:nth-child(5) { display: flex !important; }
   .hp-stats__icon  { display: none; }
-  .hp-stats__value { font-size: clamp(13px, 3.5vw, 18px); }
+  .hp-stats__value { font-size: clamp(12px, 3vw, 15px); }
   .hp-stats__label { font-size: 7px; line-height: 1.3; }
 
   /* Purpose: stacked layout on mobile */
@@ -546,8 +547,8 @@ button { font-family: var(--font-sans); }
   .hp-hero__ctas .btn { font-size: 13.5px; padding: 12px 18px; }
 
   /* Stats: scale further on tiny screens */
-  .hp-stats__value { font-size: clamp(11px, 3vw, 14px); }
-  .hp-stats__item  { padding: 10px 1px; }
+  .hp-stats__value { font-size: clamp(10px, 2.6vw, 13px); }
+  .hp-stats__item  { padding: 7px 1px; }
   .hp-stats__label { font-size: 6.5px; }
 
   /* Purpose: constrain carousel size a bit smaller on tiny screens */
