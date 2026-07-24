@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { supabaseAdmin } from "@/lib/supabase/admin";
-import { generateOrderRef } from "@/lib/utils";
+import { generateOrderNumber } from "@/lib/supabase/orders";
 import { sendOrderConfirmation, sendAdminOrderAlert } from "@/lib/email";
 
 const orderSchema = z.object({
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     const subtotal = data.items.reduce((sum, i) => sum + i.productPrice * i.quantity, 0);
     const deliveryFee = 15000;
     const total = subtotal + deliveryFee;
-    const orderNumber = generateOrderRef();
+    const orderNumber = await generateOrderNumber();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { data: order, error: orderErr } = await (supabaseAdmin.from("orders") as any)

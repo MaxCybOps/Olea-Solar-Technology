@@ -104,6 +104,28 @@ export interface BlogPostRow {
   updated_at: string;
 }
 
+export interface InstallationRow {
+  id: string;
+  order_id: string | null;
+  customer_name: string;
+  customer_phone: string | null;
+  address: string;
+  scheduled_date: string | null;
+  technician_name: string | null;
+  status: string;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ChatMessageRow {
+  id: string;
+  session_id: string;
+  role: string;
+  content: string;
+  created_at: string;
+}
+
 // ─── Insert / Update helpers ──────────────────────────────────────────────────
 
 export type ProductInsert = Omit<ProductRow, "id" | "created_at" | "updated_at">;
@@ -125,6 +147,11 @@ export type StockAdjustInsert = Omit<StockAdjustRow, "id" | "created_at">;
 
 export type BlogPostInsert = Omit<BlogPostRow, "id" | "created_at" | "updated_at">;
 export type BlogPostUpdate = Partial<BlogPostInsert>;
+
+export type InstallationInsert = Omit<InstallationRow, "id" | "created_at" | "updated_at">;
+export type InstallationUpdate = Partial<InstallationInsert>;
+
+export type ChatMessageInsert = Omit<ChatMessageRow, "id" | "created_at">;
 
 // ─── Supabase Database generic ────────────────────────────────────────────────
 // Must satisfy postgrest-js GenericSchema — each table needs Relationships: [],
@@ -179,6 +206,18 @@ export interface Database {
         Row: { key: string; value: string | null; updated_at: string };
         Insert: { key: string; value?: string | null };
         Update: { key?: string; value?: string | null };
+        Relationships: [];
+      };
+      installations: {
+        Row: InstallationRow;
+        Insert: InstallationInsert;
+        Update: InstallationUpdate;
+        Relationships: [];
+      };
+      chat_messages: {
+        Row: ChatMessageRow;
+        Insert: ChatMessageInsert;
+        Update: Partial<ChatMessageInsert>;
         Relationships: [];
       };
     };

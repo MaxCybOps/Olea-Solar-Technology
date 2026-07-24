@@ -1,7 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+async function logMessage(sessionId: string, role: "user" | "assistant", content: string) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabaseAdmin.from("chat_messages") as any).insert({ session_id: sessionId, role, content });
+  } catch (err) {
+    console.error("Chat log insert failed:", err);
+  }
+}
 
 const SYSTEM_PROMPT = `You are Olea AI, the intelligent energy assistant for Olea Technologies — a premium African clean-energy company based in Nigeria.
 
@@ -39,7 +49,7 @@ Your role is to help visitors understand their energy needs, recommend the right
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages } = await req.json();
+    const { messages, sessionId } = await req.json();
 
     if (!Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ error: "Messages required" }, { status: 400 });
@@ -54,6 +64,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid messages" }, { status: 400 });
     }
 
+    const sid = typeof sessionId === "string" && sessionId ? sessionId : "unknown";
+    const lastUserMessage = validMessages[validMessages.length - 1];
+    if (lastUserMessage?.role === "user") {
+      await logMessage(sid, "user", lastUserMessage.content);
+    }
+
     // Stream response from Claude
     const stream = await client.messages.stream({
       model: "claude-sonnet-4-6",
@@ -66,14 +82,17 @@ export async function POST(req: NextRequest) {
     const encoder = new TextEncoder();
     const readable = new ReadableStream({
       async start(controller) {
+        let assistantText = "";
         try {
           for await (const chunk of stream) {
             if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
+              assistantText += chunk.delta.text;
               controller.enqueue(encoder.encode(chunk.delta.text));
             }
           }
         } finally {
           controller.close();
+          if (assistantText) await logMessage(sid, "assistant", assistantText);
         }
       },
     });

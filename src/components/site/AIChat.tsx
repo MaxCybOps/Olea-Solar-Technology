@@ -20,6 +20,16 @@ const WELCOME: Message = {
   content: "Hi! I'm Olea AI. Tell me about your power needs and I'll guide you to the right system.",
 };
 
+function getSessionId(): string {
+  if (typeof window === "undefined") return "";
+  let id = window.localStorage.getItem("olea_chat_session");
+  if (!id) {
+    id = crypto.randomUUID();
+    window.localStorage.setItem("olea_chat_session", id);
+  }
+  return id;
+}
+
 export default function AIChat() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([WELCOME]);
@@ -27,6 +37,11 @@ export default function AIChat() {
   const [loading, setLoading] = useState(false);
   const bodyRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sessionIdRef = useRef<string>("");
+
+  useEffect(() => {
+    sessionIdRef.current = getSessionId();
+  }, []);
 
   useEffect(() => {
     if (bodyRef.current) {
@@ -54,6 +69,7 @@ export default function AIChat() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
+          sessionId: sessionIdRef.current,
         }),
       });
 

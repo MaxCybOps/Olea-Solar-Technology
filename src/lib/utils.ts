@@ -14,12 +14,6 @@ export function formatPrice(amount: number): string {
   }).format(amount);
 }
 
-export function generateOrderRef(): string {
-  const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-  const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `OT-${date}-${rand}`;
-}
-
 export function slugify(text: string): string {
   return text
     .toLowerCase()
