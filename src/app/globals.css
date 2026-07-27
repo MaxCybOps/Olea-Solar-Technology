@@ -4,6 +4,26 @@
 
 @import "tailwindcss";
 
+/* ── Page transitions (React ViewTransition, see src/app/(site)/layout.tsx) ── */
+::view-transition-old(.page-fade) {
+  animation: 180ms ease-out both pageFadeOut;
+}
+::view-transition-new(.page-fade) {
+  animation: 260ms ease-out 80ms both pageFadeIn;
+}
+@keyframes pageFadeOut {
+  to { opacity: 0; transform: translateY(-6px); }
+}
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*), ::view-transition-new(*), ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
 /* ── Design Tokens ── */
 :root {
   --olea-green-900: #07291f;
