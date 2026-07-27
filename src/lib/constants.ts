@@ -1,8 +1,8 @@
 export const SITE_NAME = "Olea Technologies";
 export const SITE_TAGLINE = "Powering Sustainable Future";
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://oleatechnologies.com";
-export const SITE_EMAIL = "hello@oleatechnologies.com";
-export const SITE_PHONE = "+234 800 000 0000";
+export const SITE_EMAIL = "oleatechnologies68@gmail.com";
+export const SITE_PHONE = "+234 701 132 0830";
 
 export const NAV_LINKS = [
   { label: "Home", href: "/" },

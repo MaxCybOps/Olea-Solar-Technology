@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone, Mail, Clock, Zap } from "lucide-react";
+import { SITE_EMAIL, SITE_PHONE } from "@/lib/constants";
 
 export default function ContactPage() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -52,8 +53,8 @@ export default function ContactPage() {
 
   const INFO = [
     { icon: <MapPin size={18} />, label: "Headquarters", value: "Owerri, Imo State, Nigeria" },
-    { icon: <Phone size={18} />,  label: "Call us",       value: "+234 800 OLEA NOW"         },
-    { icon: <Mail size={18} />,   label: "Email",         value: "hello@oleatechnologies.com" },
+    { icon: <Phone size={18} />,  label: "Call us",       value: SITE_PHONE, href: `tel:${SITE_PHONE.replace(/\s+/g, "")}` },
+    { icon: <Mail size={18} />,   label: "Email",         value: SITE_EMAIL, href: `mailto:${SITE_EMAIL}` },
     { icon: <Clock size={18} />,  label: "Hours",         value: "Mon–Sat  8am – 6pm WAT"    },
   ];
 
@@ -114,7 +115,11 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.07em", textTransform: "uppercase", color: "var(--fg-2)", marginBottom: 2 }}>{item.label}</div>
-                      <div style={{ fontSize: 15, fontWeight: 500, color: "var(--olea-ink)", lineHeight: 1.4 }}>{item.value}</div>
+                      {item.href ? (
+                        <a href={item.href} style={{ fontSize: 15, fontWeight: 500, color: "var(--olea-ink)", lineHeight: 1.4, textDecoration: "none" }}>{item.value}</a>
+                      ) : (
+                        <div style={{ fontSize: 15, fontWeight: 500, color: "var(--olea-ink)", lineHeight: 1.4 }}>{item.value}</div>
+                      )}
                     </div>
                   </div>
                 ))}
