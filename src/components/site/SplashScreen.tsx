@@ -8,21 +8,12 @@ export default function SplashScreen() {
   const [fading, setFading] = useState(false);
 
   useEffect(() => {
-    // Already seen this browser session — skip on internal remounts (e.g. fast refresh in dev)
-    if (typeof window !== "undefined" && sessionStorage.getItem("olea_splash_seen")) {
-      setVisible(false);
-      return;
-    }
-
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const holdMs = reduce ? 150 : 1250;
     const fadeMs = reduce ? 0 : 550;
 
     const t1 = setTimeout(() => setFading(true), holdMs);
-    const t2 = setTimeout(() => {
-      setVisible(false);
-      sessionStorage.setItem("olea_splash_seen", "1");
-    }, holdMs + fadeMs);
+    const t2 = setTimeout(() => setVisible(false), holdMs + fadeMs);
 
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
