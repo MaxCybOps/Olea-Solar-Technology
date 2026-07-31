@@ -70,13 +70,10 @@ export async function POST(req: NextRequest) {
       await logMessage(sid, "user", lastUserMessage.content);
     }
 
-    // Stream response from Claude
-    const stream = await client.messages.stream({
-      model: "claude-sonnet-4-6",
-      max_tokens: 400,
-      system: SYSTEM_PROMPT,
-      messages: validMessages,
-    });
+    if (!process.env.ANTHROPIC_API_KEY) {
+      console.error("Chat API error: ANTHROPIC_API_KEY is not set");
+      return NextResponse.json({ error: "AI chat is not configured on the server yet." }, { status: 503 });
+    }
 
     // Return a readable stream to the client
     const encoder = new TextEncoder();
@@ -84,11 +81,25 @@ export async function POST(req: NextRequest) {
       async start(controller) {
         let assistantText = "";
         try {
+          const stream = await client.messages.stream({
+            model: "claude-sonnet-4-6",
+            max_tokens: 400,
+            system: SYSTEM_PROMPT,
+            messages: validMessages,
+          });
+
           for await (const chunk of stream) {
             if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
               assistantText += chunk.delta.text;
               controller.enqueue(encoder.encode(chunk.delta.text));
             }
+          }
+        } catch (err) {
+          console.error("Chat stream error:", err);
+          if (!assistantText) {
+            const fallback = "Sorry, I had trouble connecting just now. Please try again, or reach us directly on the Contact page.";
+            controller.enqueue(encoder.encode(fallback));
+            assistantText = fallback;
           }
         } finally {
           controller.close();
