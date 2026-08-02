@@ -97,7 +97,9 @@ export async function POST(req: NextRequest) {
         } catch (err) {
           console.error("Chat stream error:", err);
           if (!assistantText) {
-            const fallback = "Sorry, I had trouble connecting just now. Please try again, or reach us directly on the Contact page.";
+            // TEMP DEBUG — remove once the root cause is confirmed
+            const detail = err instanceof Error ? err.message : String(err);
+            const fallback = `[DEBUG] ${detail}`;
             controller.enqueue(encoder.encode(fallback));
             assistantText = fallback;
           }
