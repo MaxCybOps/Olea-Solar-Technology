@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+// .trim() guards against a trailing newline/space from copy-pasting the key
+// into Vercel's env var UI — that alone is enough to make it an invalid
+// HTTP header value and silently break every request.
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY?.trim() });
 
 async function logMessage(sessionId: string, role: "user" | "assistant", content: string) {
   try {
@@ -97,9 +100,7 @@ export async function POST(req: NextRequest) {
         } catch (err) {
           console.error("Chat stream error:", err);
           if (!assistantText) {
-            // TEMP DEBUG — remove once the root cause is confirmed
-            const detail = err instanceof Error ? err.message : String(err);
-            const fallback = `[DEBUG] ${detail}`;
+            const fallback = "Sorry, I had trouble connecting just now. Please try again, or reach us directly on the Contact page.";
             controller.enqueue(encoder.encode(fallback));
             assistantText = fallback;
           }
