@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
         let assistantText = "";
         try {
           const stream = await client.messages.stream({
-            model: "claude-sonnet-4-6",
+            model: "claude-sonnet-5",
             max_tokens: 400,
             system: SYSTEM_PROMPT,
             messages: validMessages,
@@ -100,14 +100,7 @@ export async function POST(req: NextRequest) {
         } catch (err) {
           console.error("Chat stream error:", err);
           if (!assistantText) {
-            // TEMP DEBUG — safe: only exposes error type/status, never the raw
-            // error message (which for header-formatting errors can contain
-            // the API key itself). Remove once root cause is confirmed.
-            let safeDetail = err instanceof Error ? err.constructor.name : "unknown error";
-            if (err instanceof Anthropic.APIError) {
-              safeDetail = `${err.constructor.name} status=${err.status} type=${err.type ?? "n/a"}`;
-            }
-            const fallback = `[DEBUG] ${safeDetail}`;
+            const fallback = "Sorry, I had trouble connecting just now. Please try again, or reach us directly on the Contact page.";
             controller.enqueue(encoder.encode(fallback));
             assistantText = fallback;
           }
