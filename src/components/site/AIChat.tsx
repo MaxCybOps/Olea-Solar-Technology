@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Bot, ArrowUp, Loader2 } from "lucide-react";
+import { MessageCircle, X, Bot, ArrowUp, Loader2, Maximize2, Minimize2 } from "lucide-react";
 
 interface Message {
   role: "user" | "assistant";
@@ -32,6 +32,7 @@ function getSessionId(): string {
 
 export default function AIChat() {
   const [open, setOpen] = useState(false);
+  const [maximized, setMaximized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -143,8 +144,8 @@ export default function AIChat() {
           bottom: 96,
           right: 24,
           zIndex: 95,
-          width: "min(360px, calc(100vw - 32px))",
-          height: 480,
+          width: maximized ? "min(760px, calc(100vw - 32px))" : "min(360px, calc(100vw - 32px))",
+          height: maximized ? "min(760px, calc(100vh - 120px))" : 480,
           background: "#fff",
           borderRadius: 20,
           overflow: "hidden",
@@ -156,7 +157,7 @@ export default function AIChat() {
           opacity: open ? 1 : 0,
           visibility: open ? "visible" : "hidden",
           pointerEvents: open ? "auto" : "none",
-          transition: "transform 280ms cubic-bezier(0.22,1,0.36,1), opacity 220ms ease, visibility 0ms linear 220ms",
+          transition: "transform 280ms cubic-bezier(0.22,1,0.36,1), opacity 220ms ease, visibility 0ms linear 220ms, width 260ms cubic-bezier(0.22,1,0.36,1), height 260ms cubic-bezier(0.22,1,0.36,1)",
         }}
         aria-hidden={!open}
       >
@@ -172,7 +173,15 @@ export default function AIChat() {
               Online · replies instantly
             </div>
           </div>
-          <button onClick={() => setOpen(false)} style={{ background: "transparent", border: "none", color: "#fff", cursor: "pointer", opacity: 0.7, padding: 4, display: "flex" }}>
+          <button
+            onClick={() => setMaximized((m) => !m)}
+            aria-label={maximized ? "Shrink chat window" : "Expand chat window"}
+            title={maximized ? "Shrink" : "Expand"}
+            style={{ background: "transparent", border: "none", color: "#fff", cursor: "pointer", opacity: 0.7, padding: 4, display: "flex" }}
+          >
+            {maximized ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+          </button>
+          <button onClick={() => { setOpen(false); setMaximized(false); }} style={{ background: "transparent", border: "none", color: "#fff", cursor: "pointer", opacity: 0.7, padding: 4, display: "flex" }}>
             <X size={18} />
           </button>
         </div>

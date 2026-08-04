@@ -100,10 +100,13 @@ export async function POST(req: NextRequest) {
         } catch (err) {
           console.error("Chat stream error:", err);
           if (!assistantText) {
-            // TEMP DEBUG — safe: type/status only, never the raw message.
+            // TEMP DEBUG — safe: Anthropic.APIError.message comes from
+            // Anthropic's own JSON error body (describes the bad request
+            // field), never the raw request headers/key. Only echo .message
+            // for confirmed APIError instances; anything else stays redacted.
             let safeDetail = err instanceof Error ? err.constructor.name : "unknown error";
             if (err instanceof Anthropic.APIError) {
-              safeDetail = `${err.constructor.name} status=${err.status} type=${err.type ?? "n/a"}`;
+              safeDetail = `status=${err.status} type=${err.type ?? "n/a"} msg=${(err.message ?? "").slice(0, 200)}`;
             }
             const fallback = `[DEBUG] ${safeDetail}`;
             controller.enqueue(encoder.encode(fallback));
