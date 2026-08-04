@@ -100,7 +100,12 @@ export async function POST(req: NextRequest) {
         } catch (err) {
           console.error("Chat stream error:", err);
           if (!assistantText) {
-            const fallback = "Sorry, I had trouble connecting just now. Please try again, or reach us directly on the Contact page.";
+            // TEMP DEBUG — safe: type/status only, never the raw message.
+            let safeDetail = err instanceof Error ? err.constructor.name : "unknown error";
+            if (err instanceof Anthropic.APIError) {
+              safeDetail = `${err.constructor.name} status=${err.status} type=${err.type ?? "n/a"}`;
+            }
+            const fallback = `[DEBUG] ${safeDetail}`;
             controller.enqueue(encoder.encode(fallback));
             assistantText = fallback;
           }
